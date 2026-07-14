@@ -1,0 +1,177 @@
+openapi: 3.0.0
+info:
+  title: "SessionAPI"
+  description: "Session API"
+  version: "20260707023327"
+servers:
+  - url: http://localhost:8080/AndesPOS_API2602N/POS/AI_API/Sesion/SessionAPI
+paths:
+  /SetPrueba:
+    post:
+      tags:
+        - POS.AI_API.Sesion
+      operationId: "POS.AI_API.Sesion.SessionAPI.SetPrueba"
+      summary: "SetPrueba"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetPruebaInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SetPruebaOutput"
+
+        404:
+          description: "Not found"
+
+  /GetPrueba:
+    post:
+      tags:
+        - POS.AI_API.Sesion
+      operationId: "POS.AI_API.Sesion.SessionAPI.GetPrueba"
+      summary: "GetPrueba"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetPruebaOutput"
+
+        404:
+          description: "Not found"
+
+  /InicializarContexto:
+    post:
+      tags:
+        - POS.AI_API.Sesion
+      operationId: "POS.AI_API.Sesion.SessionAPI.InicializarContexto"
+      summary: "InicializarContexto"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InicializarContextoInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InicializarContextoOutput"
+        404:
+          description: "Not found"
+
+components:
+  schemas:
+    SetPruebaOutput:
+      properties:
+        Mensaje:
+          type: "string"
+
+    GetPruebaOutput:
+      properties:
+        ValorRecuperado:
+          type: "string"
+
+    InicializarContextoOutput:
+      properties:
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        Ok:
+          type: "boolean"
+
+    SetPruebaInput:
+      properties:
+        ValorPrueba:
+          type: "string"
+
+
+    InicializarContextoInput:
+      properties:
+        SDTIniSessionTest:
+          description: "SDTIni Session Test"
+          $ref: "#/components/schemas/POS.AI_API.Sesion.SDTIniSessionTest"
+        token:
+          type: "string"
+
+    POS.AI_API.Sesion.SDTIniSessionTest:
+      properties:
+        RutUsuario:
+          description: "Rut Usuario"
+          type: "string"
+        RutUsuarioDV:
+          description: "Rut Usuario DV"
+          type: "string"
+        Nombre:
+          description: "Nombre"
+          type: "string"
+        Perfil:
+          description: "Perfil"
+          type: "string"
+        PerfilDesc:
+          description: "Perfil Desc"
+          type: "string"
+        Mandante:
+          description: "Mandante"
+          type: "string"
+        RutEmpresa:
+          description: "Rut Empresa"
+          type: "string"
+        Sucursal:
+          description: "Sucursal"
+          type: "string"
+        PuntoAccesoKey:
+          description: "Punto Acceso Key"
+          type: "integer"
+          format: "int64"
+        EstacionIdl:
+          description: "Identificador de Estacion"
+          type: "string"
+        ModoConexion:
+          description: "Modo Conexion"
+          type: "string"
+        ModuloAplicacionIdl:
+          description: "Modulo Aplicacion IDL"
+          type: "string"
+
+
+
+    GeneXus.Common.Messages_Message:
+      properties:
+        Id:
+          description: "Id"
+          type: "string"
+        Type:
+          description: "Type"
+          type: "integer"
+          format: "int32"
+        Description:
+          description: "Description"
+          type: "string"
+
+
+
+

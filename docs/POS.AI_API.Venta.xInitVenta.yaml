@@ -1,0 +1,262 @@
+openapi: 3.0.0
+info:
+  title: "xInitVenta"
+  description: "x Init Venta"
+  version: "20260707023327"
+servers:
+  - url: http://localhost:8080/AndesPOS_API2602N/POS/AI_API/Venta/xInitVenta
+paths:
+  /GetEstadoCaja:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xInitVenta.GetEstadoCaja"
+      summary: "GetEstadoCaja"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetEstadoCajaOutput"
+        404:
+          description: "Not found"
+
+  /GetListaVentas:
+    post:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xInitVenta.GetListaVentas"
+      summary: "GetListaVentas"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetListaVentasInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetListaVentasOutput"
+        404:
+          description: "Not found"
+
+  /CrearNuevaVenta:
+    post:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xInitVenta.CrearNuevaVenta"
+      summary: "CrearNuevaVenta"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CrearNuevaVentaInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CrearNuevaVentaOutput"
+        404:
+          description: "Not found"
+
+  /AnularVenta:
+    post:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xInitVenta.AnularVenta"
+      summary: "AnularVenta"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnularVentaInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeneXus.Common.Messages_Message"  
+
+        404:
+          description: "Not found"
+
+components:
+  schemas:
+    GetEstadoCajaOutput:
+      properties:
+        EsCaja:
+          type: "boolean"
+        TurnoCajaKey:
+          type: "integer"
+          format: "int64"
+        EstadoCaja:
+          type: "string"
+        UsaMesas:
+          type: "boolean"
+        RequiereClientePreVenta:
+          type: "boolean"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetListaVentasOutput:
+      properties:
+        SDTVentas:
+          description: "SDTVenta Item"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaItem"
+        TimeStamp:
+          type: "string"
+          format: "date-time"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    CrearNuevaVentaOutput:
+      properties:
+        NotaVentaKey:
+          type: "integer"
+          format: "int64"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+
+    GetListaVentasInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        SDTFiltros:
+          description: "SDTFiltro Venta"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTFiltroVenta"
+        Modo:
+          type: "string"
+        Token:
+          type: "string"
+
+    CrearNuevaVentaInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        ClienteKey:
+          type: "integer"
+          format: "int64"
+        Modo:
+          type: "string"
+        Token:
+          type: "string"
+
+    AnularVentaInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaKey:
+          type: "integer"
+          format: "int64"
+        Token:
+          type: "string"
+
+    GeneXus.Common.Messages_Message:
+      properties:
+        Id:
+          description: "Id"
+          type: "string"
+        Type:
+          description: "Type"
+          type: "integer"
+          format: "int32"
+        Description:
+          description: "Description"
+          type: "string"
+
+
+
+    POS.AI_API.Venta.SDTFiltroVenta:
+      properties:
+        SyncTimeStamp:
+          description: "Sync Time Stamp"
+          type: "string"
+          format: "date-time"
+        FechaFiltro:
+          description: "Fecha Filtro"
+          type: "string"
+          format: "date"
+        Nota:
+          description: "Nota"
+          type: "string"
+        ClienteNombreCompleto:
+          description: "Nombre Completo"
+          type: "string"
+
+
+
+    POS.AI_API.Venta.SDTVentaItem:
+      properties:
+        NotaVentaKey:
+          description: "Nota Venta Key"
+          type: "integer"
+          format: "int64"
+        NotaVentaFecha:
+          description: "Nota Venta Fecha"
+          type: "string"
+          format: "date"
+        NotaVentaTiempo:
+          description: "Nota Venta Time"
+          type: "string"
+          format: "date-time"
+        ClienteNombreCompleto:
+          description: "Nombre Completo"
+          type: "string"
+        NotaVentaEstado:
+          description: "Nota Venta Estado"
+          type: "string"
+        NotaVentaFolioTri:
+          description: "Folio Tributario"
+          type: "integer"
+          format: "int64"
+        NotaVentaGlosa:
+          description: "Nota Venta Glosa"
+          type: "string"
+
+
+
+

@@ -1,0 +1,461 @@
+&TraceLevel = 2
+&ModoDeVenta = ModoDeVentaGet()
+&CantidadMaximaVenta = GetCantidadMaximaVentaEnv()
+&CatClasificadoras = GetSuperCatClasificadoras()
+
+Utiles.Variables.Heap.Load('NotaVenta', &NotaVentaKey.ToString() , &ObjetoHeap )
+&AceptaStockNegativo = GetParametroPos('AGREGASTOCKNEGATIVO')
+&NotaVentaProductoOrdenTrabajada = Val( Utiles.Variables.Heap.ValorGet( &ObjetoHeap , 'NotaVentaProductoOrdenTrabajada' ) )
+
+// --- VALIDACIÓN DE ESTADO ---
+for each Operaciones.mNotaVenta.NotaVenta
+    where EmpKey = &EmpKey
+    where PuntoAccesoKey = &PuntoAccesoKey
+    where NotaVentaKey = &NotaVentaKey
+    if NotaVentaEstado = ''
+        NotaVentaEstado = 'EDITANDO'
+    endif
+    if NotaVentaEstado <> 'EDITANDO'
+        &Message = new()
+        &Message.Type = MessageTypes.Error
+        &Message.Description = 'Documento no se encuentra en estado EDITANDO. No puede realizar ediciones.'
+        &Messages.Add(&Message)
+        return
+    endif
+endfor
+
+// --- BLOQUE 1: INSERCIÓN O ACTUALIZACIÓN POR CÓDIGO/ESCÁNER ---
+if &ProductoKey <> 0 
+    &TieneStock = TieneStockProducto(&EmpKey,&PuntoAccesoKey,&ProductoKey)
+    if &AceptaStockNegativo = "true" or ( &AceptaStockNegativo = "false" and &TieneStock = True)
+        for each Maestros.Productos.Producto 
+            where EmpKey = &EmpKey
+            where ProductoKey = &ProductoKey
+            &ProductoVendeLote= ProductoVendeLote
+        endfor
+        Productos.Get( &EmpKey , &PuntoAccesoKey , &ProductoKey , &CodIntValor , &ProductoDescripcion , &ProductoUnidadMedida , &Stock ,&ProductoModalidadVenta , &ProductoGlosaIdSha , &ProductoGlosaContenido, &ProductoGlosaEsEditable, &ProductoTratamientoTributario) 
+        
+        if strSearch( '.MEZON.CAJAMEZON' , &ModoDeVenta ) <> 0 AND &ProductoKey <> -3 AND &ProductoModalidadVenta <> ModalidadVenta.SoloMonto
+            &Esta = False
+            
+            for each Operaciones.mNotaVenta.NotaVenta.Producto , Maestros.Productos.CodigoInterno
+                where EmpKey = &EmpKey
+                where PuntoAccesoKey = &PuntoAccesoKey
+                where NotaVentaKey = &NotaVentaKey
+                where ProductoKey = &ProductoKey
+                where CodIntMItemKey = ProductoKey
+                where CodIntFecha <= NotaVentaTiempo and NotaVentaTiempo < CodIntFin
+                where NotaVentaProductoEstadoEntrega <> 'Pedido'
+                
+                &Esta = True
+                &NotaVentaProductoTotalItem = round( ( NotaVentaProductoPrecio*NotaVentaProductoCantidad * (100 - NotaVentaProductoDescuento ) )/ 100,0) 
+                if (NotaVentaProductoCantidad + val( &CantidadDescuentoPrecio ) >= NotaVentaProductoCantidadPedido) or (NotaVentaProductoCantidadPedido = 0) 
+                    PrecioDescuentoGet( &EmpKey, &categoriaIdl,&ProductoKey, PuntoAccesoUbiCod , NotaVentaTiempo , NotaVentaProductoCantidad , &OldPrecio , &OldDescuentoPorcentaje, &OldDescuentoMaximo ) 
+                    NotaVentaProductoCantidad  += val( &CantidadDescuentoPrecio )
+                else
+                    &OldPrecio = NotaVentaProductoPrecio
+                    &OldDescuentoPorcentaje = NotaVentaProductoDescuento
+                endif
+                
+                if NotaVentaPedidoKey = 0 
+                    and &OldPrecio = NotaVentaProductoPrecio and &OldDescuentoPorcentaje = NotaVentaProductoDescuento 
+                    PrecioDescuentoGet( &EmpKey, &categoriaIdl,&ProductoKey, PuntoAccesoUbiCod , NotaVentaTiempo , NotaVentaProductoCantidad , &Precio , &DescuentoPorcentaje, &DescuentoMaximo ) 
+                    
+                    NotaVentaProductoPrecio = &Precio
+                    NotaVentaProductoDescuento  = &DescuentoPorcentaje
+                endif
+                NotaVentaProductoTotalItem = round( ( NotaVentaProductoPrecio*NotaVentaProductoCantidad * (100 - NotaVentaProductoDescuento ) )/ 100,0)
+                
+                &Modo = 'Producto;UPD'
+                &NotaVentaProductoLinea = NotaVentaProductoLinea
+                &ProductoLinea.NotaVentaProductoLinea       = NotaVentaProductoLinea
+                &ProductoLinea.NotaVentaProductoOrden       = NotaVentaProductoOrden
+                &ProductoLinea.ProductoKey                  = ProductoKey
+                &ProductoLinea.CodIntValor                  = CodIntValor
+                &ProductoLinea.ProductoDescripcion          = ProductoDescripcion
+                &ProductoLinea.ProductoUnidadMedida         = ProductoUnidadMedida
+                &ProductoLinea.NotaVentaProductoGlosaIdSha  = NotaVentaProductoGlosaIdSha 
+                &ProductoLinea.NotaVentaProductoGlosaContenido = NotaVentaProductoGlosaContenido
+                &ProductoLinea.NotaVentaProductoCantidad    = NotaVentaProductoCantidad
+                &ProductoLinea.NotaVentaProductoPrecio      = NotaVentaProductoPrecio
+                &ProductoLinea.NotaVentaProductoDescuento   = NotaVentaProductoDescuento
+                &ProductoLinea.ProductoGlosaEsEditable = ProductoGlosaEsEditable
+                &ProductoLinea.ProductoTratamientoTributario = ProductoTratamientoTributario
+                &ProductoLinea.PuntoAccesoStockEntregaEstacionIdl = PuntoAccesoStockEntregaEstacionIdl
+                &ProductoLinea.NotaVentaProductoEntregaNumero = NotaVentaProductoEntregaNumero
+                &ProductoLinea.NotaVentaProductoTotalItem   = NotaVentaProductoTotalItem
+                &ProductoLinea.DeltaMonto = &ProductoLinea.NotaVentaProductoTotalItem - &NotaVentaProductoTotalItem
+                
+                &OutNotaVentaProductoLinea = NotaVentaProductoLinea // --- REFAC API ---
+            endfor
+        endif
+        
+        &ProductoLinea.ProductoVendeLote = &ProductoVendeLote
+        if strSearch( '.MEZON.CAJAMEZON' , &ModoDeVenta ) = 0 or not &Esta OR &ProductoKey = -3 OR &ProductoModalidadVenta = ModalidadVenta.SoloMonto
+            For each Parametros.Stock.PuntoAccesoStock using dsPuntoAcceso(&EmpKey, &PuntoAccesoKey)
+                where ProductoKey = &ProductoKey
+                &PuntoAccesoStockEntregaEstacionIdl = PuntoAccesoStockEntregaEstacionIdl
+            endfor
+            
+            for each Operaciones.mNotaVenta.NotaVenta
+                where EmpKey = &EmpKey
+                where PuntoAccesoKey = &PuntoAccesoKey
+                where NotaVentaKey = &NotaVentaKey
+                NotaVentaUltimaLineaProducto += 1
+                &NotaVentaUltimaLineaProducto = NotaVentaUltimaLineaProducto
+                PrecioDescuentoGet( &EmpKey, &categoriaIdl, &ProductoKey , PuntoAccesoUbiCod , NotaVentaTiempo ,val( &CantidadDescuentoPrecio) , &Precio , &DescuentoPorcentaje, &DescuentoMaximo )
+            endfor
+            
+            new
+                EmpKey = &EmpKey
+                PuntoAccesoKey = &PuntoAccesoKey
+                NotaVentaKey = &NotaVentaKey
+                NotaVentaProductoLinea      = &NotaVentaUltimaLineaProducto 
+                NotaVentaProductoOrden      = &NotaVentaUltimaLineaProducto 
+                ProductoKey                 = &ProductoKey
+                
+                if (NotaVentaProductoCantidad + val( &CantidadDescuentoPrecio ) >= NotaVentaProductoCantidadPedido) or (NotaVentaProductoCantidadPedido = 0)
+                    NotaVentaProductoCantidad  += val( &CantidadDescuentoPrecio ) 
+                endif
+                if &ProductoModalidadVenta <> ModalidadVenta.Unitario
+                    NotaVentaProductoCantidad = 0
+                endif
+                
+                NotaVentaProductoPrecio     = &Precio
+                NotaVentaProductoDescuento  = &DescuentoPorcentaje
+                NotaVentaProductoTotalItem = round( ( NotaVentaProductoPrecio*NotaVentaProductoCantidad * (100 - NotaVentaProductoDescuento ) )/ 100,0) 
+                NotaVentaProductoGlosaIdSha = &ProductoGlosaIdSha
+                LoteKey = 0
+                
+                &Modo = 'Producto;INS'
+                &NotaVentaProductoLinea                     = NotaVentaProductoLinea
+                &ProductoLinea.NotaVentaProductoLinea       = NotaVentaProductoLinea
+                &ProductoLinea.NotaVentaProductoOrden       = NotaVentaProductoOrden
+                &ProductoLinea.ProductoKey                  = &ProductoKey
+                &ProductoLinea.CodIntValor                  = &CodIntValor
+                &ProductoLinea.ProductoDescripcion          = &ProductoDescripcion
+                &ProductoLinea.ProductoUnidadMedida         = &ProductoUnidadMedida
+                &ProductoLinea.NotaVentaProductoGlosaIdSha  = &ProductoGlosaIdSha 
+                &ProductoLinea.NotaVentaProductoGlosaContenido = &ProductoGlosaContenido
+                &ProductoLinea.NotaVentaProductoCantidad    = NotaVentaProductoCantidad
+                &ProductoLinea.NotaVentaProductoPrecio      = NotaVentaProductoPrecio
+                &ProductoLinea.NotaVentaProductoDescuento   = NotaVentaProductoDescuento
+                &ProductoLinea.ProductoGlosaEsEditable      = &ProductoGlosaEsEditable
+                &ProductoLinea.ProductoTratamientoTributario = &ProductoTratamientoTributario
+                &ProductoLinea.NotaVentaProductoTotalItem   = round( ( NotaVentaProductoPrecio*NotaVentaProductoCantidad * (100 - NotaVentaProductoDescuento ) )/ 100,0) 
+                &ProductoLinea.DeltaMonto = &ProductoLinea.NotaVentaProductoTotalItem
+                &ProductoLinea.PuntoAccesoStockEntregaEstacionIdl = &PuntoAccesoStockEntregaEstacionIdl
+                &ProductoLinea.NotaVentaProductoEntregaNumero = 0 
+                &ProductoLinea.ProductoVendeLote = &ProductoVendeLote
+                &ProductoLinea.LoteKey = 0
+                
+                &OutNotaVentaProductoLinea = NotaVentaProductoLinea // --- REFAC API ---
+				if 	&ProductoLinea.PuntoAccesoStockEntregaEstacionIdl <> '' and &ProductoLinea.NotaVentaProductoEntregaNumero = 0
+					&ExisteProductoXEncargarDeliveryOk = true
+				endif
+			//OJO linea 194
+					logSysOut( &Pgmname , 2 , 'PuntoAccesoStockEntregaEstacionIdl 2'+&ProductoLinea.PuntoAccesoStockEntregaEstacionIdl)
+            endnew
+        endif 
+    else
+        &Message = new()
+        &Message.Type = MessageTypes.Error
+        &Message.Description = 'Producto sin Stock'
+        &Messages.Add(&Message)
+        return
+    endif
+    
+// --- BLOQUE 2: MODIFICACIÓN SOBRE LÍNEA ACTIVA ---
+else
+    for each Operaciones.mNotaVenta.NotaVenta.Producto, Maestros.Productos.CodigoInterno
+        where EmpKey = &EmpKey
+        where PuntoAccesoKey = &PuntoAccesoKey
+        where NotaVentaKey = &NotaVentaKey
+        where NotaVentaProductoLinea = &NotaVentaProductoOrdenTrabajada
+        where ProductoKey = CodIntMItemKey
+        where CodIntFecha <= NotaVentaTiempo and NotaVentaTiempo < CodIntFin
+        
+        &NotaVentaProductoTotalItem = round( ( NotaVentaProductoPrecio*NotaVentaProductoCantidad * (100 - NotaVentaProductoDescuento ) )/ 100,0) 
+        Productos.Get( &EmpKey , &PuntoAccesoKey , ProductoKey , &DummyCodIntValor , &DummyProductoDescripcion , &DummyProductoUnidadMedida , &Stock ,&DummyProductoModalidadVenta , &DummyProductoGlosaIdSha , &DummyProductoGlosaContenido, &DummyProductoGlosaEsEditable, &DummyProductoTratamientoTributario)
+        
+        do case
+            Case &Accion = 'ModificaCantidad'
+                if NOT NotaVentaProductoEmpaquetado
+                    do case
+                        Case ProductoModalidadVenta = ModalidadVenta.Monto
+                            &Message = new()
+                            &Message.Type = MessageTypes.Error
+                            &Message.Description = "Producto "+ProductoDescripcion+", se vende por monto. Ingrese monto total"
+                            &Messages.Add(&Message)
+                            return
+                        Case ProductoModalidadVenta = ModalidadVenta.SoloMonto
+                            &Message = new()
+                            &Message.Type = MessageTypes.Error
+                            &Message.Description = "Producto "+ProductoDescripcion+", se vende por SoloMonto. Ingrese monto total"
+                            &Messages.Add(&Message)
+                            return
+                        otherwise
+                            if (NotaVentaProductoCantidad + val( &CantidadDescuentoPrecio )) > &Stock and &AceptaStockNegativo = "false"
+                                &IntAux = (NotaVentaProductoCantidad + val( &CantidadDescuentoPrecio ))
+                                &Message = new()
+                                &Message.Type = MessageTypes.Error
+                                &Message.Description = 'El stock total actual es insuficiente para ingresar la cantidad solicitada.'
+                                &Messages.Add(&Message)
+                                return
+                            else    
+                                if (NotaVentaProductoCantidadPedido = 0) or (NotaVentaProductoCantidad + val( &CantidadDescuentoPrecio ) >= NotaVentaProductoCantidadPedido) 
+                                    PrecioDescuentoGet( &EmpKey, &categoriaIdl,ProductoKey, PuntoAccesoUbiCod , NotaVentaTiempo , NotaVentaProductoCantidad , &OldPrecio , &OldDescuentoPorcentaje, &OldDescuentoMaximo )
+                                    NotaVentaProductoCantidad  += val( &CantidadDescuentoPrecio )
+                                    if ProductoModalidadVenta = ModalidadVenta.Unitario
+                                        NotaVentaProductoCantidad = Trunc(NotaVentaProductoCantidad , 0)
+                                    endif
+                                    if (NotaVentaProductoPrecio = &OldPrecio and NotaVentaProductoDescuento = &OldDescuentoPorcentaje) or &OldPrecio = 0 and &OldDescuentoPorcentaje = 0
+                                        PrecioDescuentoGet( &EmpKey , &categoriaIdl, ProductoKey , PuntoAccesoUbiCod , NotaVentaTiempo , NotaVentaProductoCantidad , NotaVentaProductoPrecio , NotaVentaProductoDescuento , &DummyDescuentoMaximo  )
+                                    endif
+                                endif
+                            endif
+                            NotaVentaProductoTotalItem = round( ( NotaVentaProductoPrecio*NotaVentaProductoCantidad * (100 - NotaVentaProductoDescuento ) )/ 100,0) 
+                    endcase
+                endif
+                
+            Case &Accion = 'PisaCantidadMonto'
+                if NOT NotaVentaProductoEmpaquetado
+                    if ProductoUnidadMedida.EndsWith('2')
+                        &Message = new()
+                        &Message.Type = MessageTypes.Error
+                        &Message.Description = 'El producto ' + ProductoDescripcion + ' tiene dos dimensiones, debe ingresarlas.'
+                        &Messages.Add(&Message)
+                        return
+                    else
+                        do case
+                            case ProductoModalidadVenta = ModalidadVenta.Granel or ProductoModalidadVenta = ModalidadVenta.Unitario
+                                if &CantidadDescuentoPrecio.ToNumeric() > &CantidadMaximaVenta
+                                    &Message = new()
+                                    &Message.Type = MessageTypes.Error
+                                    &Message.Description = 'La cantidad ingresada supera el máximo o el producto no existe.'
+                                    &Messages.Add(&Message)
+                                    return
+                                else
+                                    if val(&CantidadDescuentoPrecio) > &Stock and &AceptaStockNegativo = "false"
+                                        &Message = new()
+                                        &Message.Type = MessageTypes.Error
+                                        &Message.Description = 'Stock insuficiente.'
+                                        &Messages.Add(&Message)
+                                        return
+                                    else
+                                        if (NotaVentaProductoCantidad + val( &CantidadDescuentoPrecio ) >= NotaVentaProductoCantidadPedido) or (NotaVentaProductoCantidadPedido = 0)
+                                            PrecioDescuentoGet( &EmpKey, &categoriaIdl,ProductoKey, PuntoAccesoUbiCod , NotaVentaTiempo , NotaVentaProductoCantidad , &OldPrecio , &OldDescuentoPorcentaje, &OldDescuentoMaximo  ) 
+                                            NotaVentaProductoCantidad  = val( &CantidadDescuentoPrecio ) 
+                                            if ProductoModalidadVenta = ModalidadVenta.Unitario
+                                                NotaVentaProductoCantidad = Trunc(NotaVentaProductoCantidad , 0)
+                                            endif
+                                        else
+                                            &OldPrecio = NotaVentaProductoPrecio
+                                            &OldDescuentoPorcentaje = NotaVentaProductoDescuento
+                                        endif
+                                        if (&OldPrecio = NotaVentaProductoPrecio and &OldDescuentoPorcentaje = NotaVentaProductoDescuento) or &OldPrecio = 0 and &OldDescuentoPorcentaje = 0 
+                                            PrecioDescuentoGet( &EmpKey , &categoriaIdl, ProductoKey , PuntoAccesoUbiCod , NotaVentaTiempo , NotaVentaProductoCantidad , NotaVentaProductoPrecio , NotaVentaProductoDescuento, &DummyDescuentoMaximo  )
+                                        endif
+                                        NotaVentaProductoDimensiones = ''
+                                        NotaVentaProductoTotalItem = round( ( NotaVentaProductoCantidad * NotaVentaProductoPrecio * (100 - NotaVentaProductoDescuento ) )/ 100,0) 
+                                    endif
+                                endif
+                            case ProductoModalidadVenta = ModalidadVenta.Monto 
+                                PrecioDescuentoGet( &EmpKey , &categoriaIdl, ProductoKey , PuntoAccesoUbiCod , NotaVentaTiempo , 1 , &Precio , &DescuentoPorcentaje, &DescuentoMaximo  )
+                                NotaVentaProductoDimensiones = ''
+                                NotaVentaProductoPrecio     = &Precio
+                                NotaVentaProductoDescuento  = &DescuentoPorcentaje
+                                NotaVentaProductoTotalItem = val( &CantidadDescuentoPrecio ) 
+                                &CantidadDecimales = 3
+                                if NotaVentaProductoPrecio = 0
+                                    NotaVentaProductoCantidad = 0
+                                else    
+                                    if round( NotaVentaProductoTotalItem *100 / ( NotaVentaProductoPrecio * (100 - NotaVentaProductoDescuento ) ), &CantidadDecimales) > &Stock and &AceptaStockNegativo = "false"
+                                        &Message = new()
+                                        &Message.Type = MessageTypes.Error
+                                        &Message.Description = 'Stock insuficiente para el monto ingresado.'
+                                        &Messages.Add(&Message)
+                                        return
+                                    endif
+                                    NotaVentaProductoCantidad = round( NotaVentaProductoTotalItem *100 / ( NotaVentaProductoPrecio * (100 - NotaVentaProductoDescuento ) ), &CantidadDecimales) 
+                                endif
+                            case ProductoModalidadVenta = ModalidadVenta.SoloMonto
+                                PrecioDescuentoGet( &EmpKey , &categoriaIdl, ProductoKey , PuntoAccesoUbiCod , NotaVentaTiempo , 1 , &Precio , &DescuentoPorcentaje, &DescuentoMaximo  )
+                                NotaVentaProductoDimensiones = ''
+                                NotaVentaProductoPrecio     = val( &CantidadDescuentoPrecio )
+                                NotaVentaProductoDescuento  = 0
+                                NotaVentaProductoTotalItem = val( &CantidadDescuentoPrecio )
+                                if NotaVentaProductoPrecio = 0
+                                    NotaVentaProductoCantidad = 0
+                                else
+                                    NotaVentaProductoCantidad = 1
+                                endif
+                        endcase
+                    endif
+                else
+                    if &CantidadDescuentoPrecio.ToNumeric() = 0
+                        PrecioDescuentoGet( &EmpKey, &categoriaIdl,ProductoKey, PuntoAccesoUbiCod , NotaVentaTiempo , NotaVentaProductoCantidad , &OldPrecio , &OldDescuentoPorcentaje, &OldDescuentoMaximo  ) 
+                        NotaVentaProductoCantidad  = val( &CantidadDescuentoPrecio )
+                        if (&OldPrecio = NotaVentaProductoPrecio and &OldDescuentoPorcentaje = NotaVentaProductoDescuento) or &OldPrecio = 0 and &OldDescuentoPorcentaje = 0 
+                            PrecioDescuentoGet( &EmpKey , &categoriaIdl, ProductoKey , PuntoAccesoUbiCod , NotaVentaTiempo , NotaVentaProductoCantidad , NotaVentaProductoPrecio , NotaVentaProductoDescuento, &DummyDescuentoMaximo  )
+                        endif
+                        NotaVentaProductoTotalItem = 0
+                    endif
+                endif
+                
+            Case &Accion = 'PisaDimensiones'
+                if not ProductoUnidadMedida.EndsWith('2')
+                    &Message = new()
+                    &Message.Type = MessageTypes.Error
+                    &Message.Description = 'El producto ' + ProductoDescripcion + ', no es de dos dimensiones.'
+                    &Messages.Add(&Message)
+                    return
+                else
+                    &StrAux = &CantidadDescuentoPrecio.Trim()
+                    &Dimensiones = &StrAux.SplitRegEx('\*')
+                    PrecioDescuentoGet( &EmpKey ,&categoriaIdl, ProductoKey , PuntoAccesoUbiCod , NotaVentaTiempo , NotaVentaProductoCantidad , &OldPrecio , &OldDescuentoPorcentaje, &OldDescuentoMaximo  )
+                    NotaVentaProductoCantidad = val( &Dimensiones.Item(1) ) * val( &Dimensiones.Item(2) )
+                    if NotaVentaProductoPrecio = &OldPrecio and NotaVentaProductoDescuento = &OldDescuentoPorcentaje
+                        PrecioDescuentoGet( &EmpKey ,&categoriaIdl, ProductoKey , PuntoAccesoUbiCod , NotaVentaTiempo , NotaVentaProductoCantidad , &Precio , &DescuentoPorcentaje, &DescuentoMaximo  )
+                    endif
+                    NotaVentaProductoDimensiones = &Dimensiones.Item(1) + ProductoUnidadMedida.Substring( 1 , ProductoUnidadMedida.Length() - 1  ) + 'x' + &Dimensiones.Item(2) + ProductoUnidadMedida.Substring( 1 , ProductoUnidadMedida.Length() - 1  ) 
+                    NotaVentaProductoPrecio     = &Precio
+                    NotaVentaProductoDescuento  = &DescuentoPorcentaje
+                    if &Dimensiones.Count = 3 
+                        if &Dimensiones.Item(3).IsMatch('^[0-9]{1,9}$')
+                            NotaVentaProductoCantidad = val( &Dimensiones.Item(1) ) * val( &Dimensiones.Item(2) ) * val( &Dimensiones.Item(3) )
+                            NotaVentaProductoDimensiones = &Dimensiones.Item(1) + ProductoUnidadMedida.Substring( 1 , ProductoUnidadMedida.Length() - 1  ) + 'x' + &Dimensiones.Item(2) + ProductoUnidadMedida.Substring( 1 , ProductoUnidadMedida.Length() - 1  ) + ', ' + &Dimensiones.Item(3) + ' piezas.' 
+                        else
+                            &Message = new()
+                            &Message.Type = MessageTypes.Error
+                            &Message.Description = 'El tercer número debe ser entero.'
+                            &Messages.Add(&Message)
+                            return
+                        endif
+                    endif
+                endif
+                NotaVentaProductoTotalItem = round( ( NotaVentaProductoPrecio*NotaVentaProductoCantidad * (100 - NotaVentaProductoDescuento ) )/ 100,0) 
+                
+            Case  &Accion = 'DescuentoPorcentual'
+                PrecioDescuentoGet( &EmpKey ,&categoriaIdl, ProductoKey , PuntoAccesoUbiCod , NotaVentaTiempo , NotaVentaProductoCantidad , &Precio , &DescuentoPorcentaje, &DescuentoMaximo )
+                NotaVentaProductoDescuento  = val(&CantidadDescuentoPrecio.Substring(2 , &CantidadDescuentoPrecio.Length() ))
+                NotaVentaProductoTotalItem = round( ( NotaVentaProductoPrecio*NotaVentaProductoCantidad * (100 - NotaVentaProductoDescuento ) )/ 100,0) 
+                if NotaVentaProductoDescuento > &DescuentoMaximo and &DescuentoMaximo <> 0
+                    NotaVentaProductoTotalItem = round( ( NotaVentaProductoPrecio*NotaVentaProductoCantidad * (100 - &DescuentoMaximo ) )/ 100,0) 
+                    NotaVentaProductoDescuento = &DescuentoMaximo
+                endif
+                
+            Case &Accion = 'PisaPrecio'
+                do case
+                    Case ProductoModalidadVenta = ModalidadVenta.Monto OR ProductoModalidadVenta = ModalidadVenta.SoloMonto
+                        &Message = new()
+                        &Message.Type = MessageTypes.Error
+                        &Message.Description = "Producto se vende por monto. Ingrese monto total"
+                        &Messages.Add(&Message)
+                        return
+                    otherwise
+                        NotaVentaProductoPrecio     = val(&CantidadDescuentoPrecio.Substring(2 , &CantidadDescuentoPrecio.Length() ))
+                        NotaVentaProductoTotalItem = round( ( NotaVentaProductoPrecio*NotaVentaProductoCantidad * (100 - NotaVentaProductoDescuento ) )/ 100,0) 
+                endcase
+        endcase
+        
+        &Modo = 'Producto;UPD'
+        &NotaVentaProductoLinea = NotaVentaProductoLinea
+        
+        &ProductoLinea.NotaVentaProductoLinea       = NotaVentaProductoLinea
+        &ProductoLinea.NotaVentaProductoOrden       = NotaVentaProductoOrden 
+        &ProductoLinea.ProductoKey                  = ProductoKey
+        &ProductoLinea.CodIntValor                  = CodIntValor
+        &ProductoLinea.ProductoDescripcion          = ProductoDescripcion
+        &ProductoLinea.ProductoUnidadMedida         = ProductoUnidadMedida
+        &ProductoLinea.NotaVentaProductoGlosaIdSha  = NotaVentaProductoGlosaIdSha 
+        &ProductoLinea.NotaVentaProductoGlosaContenido = NotaVentaProductoGlosaContenido
+        &ProductoLinea.NotaVentaProductoCantidad    = NotaVentaProductoCantidad
+        &ProductoLinea.NotaVentaProductoDimensiones = NotaVentaProductoDimensiones
+        &ProductoLinea.NotaVentaProductoPrecio      = NotaVentaProductoPrecio
+        &ProductoLinea.NotaVentaProductoDescuento   = NotaVentaProductoDescuento
+        &ProductoLinea.ProductoGlosaEsEditable      = ProductoGlosaEsEditable
+        &ProductoLinea.ProductoTratamientoTributario = ProductoTratamientoTributario
+        &ProductoLinea.NotaVentaProductoTotalItem   = NotaVentaProductoTotalItem
+        &ProductoLinea.DeltaMonto = &ProductoLinea.NotaVentaProductoTotalItem - &NotaVentaProductoTotalItem
+        &ProductoLinea.PuntoAccesoStockEntregaEstacionIdl = PuntoAccesoStockEntregaEstacionIdl
+        &ProductoLinea.NotaVentaProductoEntregaNumero = NotaVentaProductoEntregaNumero
+        &ProductoLinea.ProductoVendeLote = &ProductoVendeLote
+        
+        &OutNotaVentaProductoLinea = NotaVentaProductoLinea // --- REFAC API ---
+        
+        when none
+        for each Operaciones.mNotaVenta.NotaVenta.ItemsLibre
+            where EmpKey = &EmpKey
+            where PuntoAccesoKey = &PuntoAccesoKey
+            where NotaVentaKey = &NotaVentaKey
+            where NotaVentaItemLibreLinea = &NotaVentaProductoOrdenTrabajada
+            
+            &NotaVentaItemLibreTotalItem = round( ( NotaVentaItemLibrePrecio*NotaVentaItemLibreCantidad * (100 - NotaVentaItemLibreDescuento ) )/ 100,0) 
+            do case
+                Case &Accion = 'ModificaCantidad'
+                    if NOT NotaVentaProductoEmpaquetado
+                        NotaVentaItemLibreCantidad  += val( &CantidadDescuentoPrecio ) 
+                        if (NotaVentaItemLibreCantidad + val( &CantidadDescuentoPrecio ) >= NotaVentaItemLibreCantidadPedido) or (NotaVentaItemLibreCantidadPedido = 0)
+                            NotaVentaItemLibreCantidad  += val( &CantidadDescuentoPrecio ) 
+                        endif
+                        NotaVentaItemLibreTotalItem = round( ( NotaVentaItemLibrePrecio*NotaVentaItemLibreCantidad * (100 - NotaVentaItemLibreDescuento ) )/ 100,0) 
+                    endif
+                Case &Accion = 'PisaCantidadMonto'
+                    if NOT NotaVentaProductoEmpaquetado
+                        if NotaVentaItemLibreUnidadMedida.EndsWith('2')
+                            &Message = new()
+                            &Message.Type = MessageTypes.Error
+                            &Message.Description = 'El ItemLibre tiene dos dimenciones, debe ingresarlas.'
+                            &Messages.Add(&Message)
+                            return
+                        else
+                            if (NotaVentaItemLibreCantidad + val( &CantidadDescuentoPrecio ) >= NotaVentaItemLibreCantidadPedido) or (NotaVentaItemLibreCantidadPedido = 0)
+                                NotaVentaItemLibreCantidad  = val( &CantidadDescuentoPrecio ) 
+                            endif
+                            NotaVentaItemLibreTotalItem = round( ( NotaVentaItemLibreCantidad * NotaVentaItemLibrePrecio * (100 - NotaVentaItemLibreDescuento ) )/ 100,0) 
+                        endif
+                    endif
+                Case  &Accion = 'DescuentoPorcentual'
+                    NotaVentaItemLibreDescuento = val(&CantidadDescuentoPrecio.Substring(2 , &CantidadDescuentoPrecio.Length() ))
+                    NotaVentaItemLibreTotalItem = round( ( NotaVentaItemLibrePrecio*NotaVentaItemLibreCantidad * (100 - NotaVentaItemLibreDescuento ) )/ 100,0) 
+                Case &Accion = 'PisaPrecio'
+                    NotaVentaItemLibrePrecio        = val(&CantidadDescuentoPrecio.Substring(2 , &CantidadDescuentoPrecio.Length() ))
+                    NotaVentaItemLibreTotalItem = round( ( NotaVentaItemLibrePrecio*NotaVentaItemLibreCantidad * (100 - NotaVentaItemLibreDescuento ) )/ 100,0) 
+            endcase
+            
+            &Modo = 'ItemLibre;UPD'
+            &NotaVentaProductoLinea = NotaVentaItemLibreLinea
+            
+            &ProductoLinea.NotaVentaProductoLinea       = NotaVentaItemLibreLinea
+            &ProductoLinea.NotaVentaProductoOrden       = NotaVentaItemLibreOrden 
+            &ProductoLinea.ProductoKey                  = 0
+            &ProductoLinea.CodIntValor                  = NotaVentaItemLibreCodigo
+            &ProductoLinea.ProductoDescripcion          = NotaVentaItemLibreDescripcion
+            &ProductoLinea.ProductoUnidadMedida         = NotaVentaItemLibreUnidadMedida
+            &ProductoLinea.NotaVentaProductoGlosaIdSha  = NotaVentaItemLibreGlosaIdSha 
+            &ProductoLinea.NotaVentaProductoGlosaContenido = NotaVentaItemLibreGlosaContenido
+            &ProductoLinea.NotaVentaProductoCantidad    = NotaVentaItemLibreCantidad
+            &ProductoLinea.NotaVentaProductoDimensiones = NotaVentaItemLibreDimensiones
+            &ProductoLinea.NotaVentaProductoPrecio      = NotaVentaItemLibrePrecio
+            &ProductoLinea.NotaVentaProductoDescuento   = NotaVentaItemLibreDescuento
+            &ProductoLinea.ProductoTratamientoTributario = ProductoTratamientoTributario
+            &ProductoLinea.NotaVentaProductoTotalItem   = NotaVentaItemLibreTotalItem
+            &ProductoLinea.DeltaMonto = &ProductoLinea.NotaVentaProductoTotalItem - &NotaVentaItemLibreTotalItem
+            &ProductoLinea.PuntoAccesoStockEntregaEstacionIdl = PuntoAccesoStockEntregaEstacionIdl
+            &ProductoLinea.NotaVentaProductoEntregaNumero = NotaVentaProductoEntregaNumero
+            &ProductoLinea.ProductoVendeLote = &ProductoVendeLote       
+            
+            &OutNotaVentaProductoLinea = NotaVentaItemLibreLinea // --- REFAC API ---
+        endfor          
+    endfor
+endif 
+
+Utiles.Variables.Heap.ValorSet(&ObjetoHeap, 'NotaVentaProductoOrdenTrabajada' , &NotaVentaProductoLinea.ToString())   
+Utiles.Variables.Heap.Save( 'NotaVenta' , &ObjetoHeap ) 
+CheckLeyRedondeo(&EmpKey , &PuntoAccesoKey , &NotaVentaKey, &NotaVentaVuelto, &NotaVentaTotalBruto)
+&LineaActivaIdl = &EmpKey.ToString().Trim()+&PuntoAccesoKey.ToString().Trim()+&NotaVentaKey.ToString().Trim()
+SetWebVariable(&LineaActivaIdl,&ProductoLinea.NotaVentaProductoLinea.ToString())
+
+
+Parm(in:&EmpKey, in:&PuntoAccesoKey, in:&NotaVentaKey, in:&CategoriaIdl, in:&Accion, in:&ProductoKey, in:&CantidadDescuentoPrecio, out:&OutNotaVentaProductoLinea, out:&Messages);

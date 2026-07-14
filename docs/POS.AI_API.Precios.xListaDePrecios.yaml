@@ -1,0 +1,690 @@
+openapi: 3.0.0
+info:
+  title: "xListaDePrecios"
+  description: "x Lista De Precios"
+  version: "20260707023327"
+servers:
+  - url: http://localhost:8080/AndesPOS_API2602N/POS/AI_API/Precios/xListaDePrecios
+paths:
+  /POS/AI_API/Precios/xListaDePrecios/gxobject:
+    post:
+      tags:
+        - POS.AI_API.Precios
+      operationId: "UploadPOS.AI_API.Precios.xListaDePrecios"
+      summary: "Upload a binary for xListaDePrecios"
+      responses:
+        200:
+          description: "Successful operation"
+        400:
+          description: "Bad request"
+        500:
+          description: "Internal Server Error"
+
+  /GetPrecios:
+    post:
+      tags:
+        - POS.AI_API.Precios
+      operationId: "POS.AI_API.Precios.xListaDePrecios.GetPrecios"
+      summary: "GetPrecios"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetPreciosInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetPreciosOutput"
+        404:
+          description: "Not found"
+
+  /CaducarPrecio:
+    post:
+      tags:
+        - POS.AI_API.Precios
+      operationId: "POS.AI_API.Precios.xListaDePrecios.CaducarPrecio"
+      summary: "CaducarPrecio"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaducarPrecioInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaducarPrecioOutput"
+        404:
+          description: "Not found"
+
+  /GetToken:
+    post:
+      tags:
+        - POS.AI_API.Precios
+      operationId: "POS.AI_API.Precios.xListaDePrecios.GetToken"
+      summary: "GetToken"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetTokenInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTokenOutput"
+        404:
+          description: "Not found"
+
+  /GetProductosBuscador:
+    get:
+      tags:
+        - POS.AI_API.Precios
+      operationId: "POS.AI_API.Precios.xListaDePrecios.GetProductosBuscador"
+      summary: "GetProductosBuscador"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Textobusqueda"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetProductosBuscadorOutput"
+        404:
+          description: "Not found"
+
+  /CrearPrecioNuevo:
+    post:
+      tags:
+        - POS.AI_API.Precios
+      operationId: "POS.AI_API.Precios.xListaDePrecios.CrearPrecioNuevo"
+      summary: "CrearPrecioNuevo"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CrearPrecioNuevoInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CrearPrecioNuevoOutput"
+        404:
+          description: "Not found"
+
+  /GetUbicaciones:
+    get:
+      tags:
+        - POS.AI_API.Precios
+      operationId: "POS.AI_API.Precios.xListaDePrecios.GetUbicaciones"
+      summary: "GetUbicaciones"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetUbicacionesOutput"
+        404:
+          description: "Not found"
+
+  /UploadPreciosNativo:
+    post:
+      tags:
+        - POS.AI_API.Precios
+      operationId: "POS.AI_API.Precios.xListaDePrecios.UploadPreciosNativo"
+      summary: "UploadPreciosNativo"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UploadPreciosNativoInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadPreciosNativoOutput"
+        404:
+          description: "Not found"
+
+  /GetFormatosUpload:
+    get:
+      tags:
+        - POS.AI_API.Precios
+      operationId: "POS.AI_API.Precios.xListaDePrecios.GetFormatosUpload"
+      summary: "GetFormatosUpload"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Parmtransconf"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetFormatosUploadOutput"
+        404:
+          description: "Not found"
+
+  /GuardarPrecioAPI:
+    post:
+      tags:
+        - POS.AI_API.Precios
+      operationId: "POS.AI_API.Precios.xListaDePrecios.GuardarPrecioAPI"
+      summary: "GuardarPrecioAPI"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuardarPrecioAPIInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuardarPrecioAPIOutput"
+        404:
+          description: "Not found"
+
+  /GetCategoriasPrecio:
+    get:
+      tags:
+        - POS.AI_API.Precios
+      operationId: "POS.AI_API.Precios.xListaDePrecios.GetCategoriasPrecio"
+      summary: "GetCategoriasPrecio"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCategoriasPrecioOutput"
+        404:
+          description: "Not found"
+
+components:
+  schemas:
+    GetPreciosOutput:
+      properties:
+        ListaPreciosSDT:
+          description: "SDTPrecios"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Precios.SDTPrecios"
+        TimeStamp:
+          type: "string"
+          format: "date-time"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    CaducarPrecioOutput:
+      properties:
+        Mensaje:
+          type: "string"
+        Ok:
+          type: "boolean"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetTokenOutput:
+      properties:
+        Token:
+          type: "string"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetProductosBuscadorOutput:
+      properties:
+        ProductoSearchSDT:
+          description: "Producto Search SDT"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Precios.ProductoSearchSDT"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    CrearPrecioNuevoOutput:
+      properties:
+        Mensaje:
+          type: "string"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetUbicacionesOutput:
+      properties:
+        UbicacionesComboSDT:
+          description: "Ubicacion Combo SDT"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Precios.UbicacionComboSDT"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    UploadPreciosNativoOutput:
+      properties:
+        Mensaje:
+          type: "string"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetFormatosUploadOutput:
+      properties:
+        FormatosList:
+          description: "Formato Item"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Precios.FormatoItem"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GuardarPrecioAPIOutput:
+      properties:
+        Mensaje:
+          type: "string"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetCategoriasPrecioOutput:
+      properties:
+        CategoriaPrecioSDT:
+          description: "Categoria Precio SDT"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Precios.CategoriaPrecioSDT"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetPreciosInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        FiltroPreciosSDT:
+          description: "Filtro Precios"
+          $ref: "#/components/schemas/POS.AI_API.Precios.FiltroPrecios"
+        Token:
+          type: "string"
+
+    CaducarPrecioInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        ProductoKey:
+          type: "integer"
+          format: "int64"
+        PrecioTimeInicio:
+          type: "string"
+          format: "date-time"
+        PrecioUbiCod:
+          type: "string"
+        CategoriaPrecioIdl:
+          type: "string"
+        PrecioCantidad:
+          type: "number"
+          format: "double"
+        PrecioHoraInicio:
+          type: "string"
+        Token:
+          type: "string"
+
+    GetTokenInput:
+      properties:
+        StrControl:
+          type: "string"
+
+
+    CrearPrecioNuevoInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        ProductoKey:
+          type: "integer"
+          format: "int64"
+        UbiCod:
+          type: "string"
+        PrecioValor:
+          type: "number"
+          format: "double"
+        Token:
+          type: "string"
+
+
+    UploadPreciosNativoInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        ParmTransConf:
+          type: "string"
+        FileBlobFile:
+          type: "string"
+        FileName:
+          type: "string"
+        Token:
+          type: "string"
+
+
+    GuardarPrecioAPIInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        ProductoKey:
+          type: "integer"
+          format: "int64"
+        PrecioTimeInicio:
+          type: "string"
+          format: "date-time"
+        UbiCod:
+          type: "string"
+        CategoriaPrecioIdl:
+          type: "string"
+        PrecioCantidad:
+          type: "number"
+          format: "double"
+        PrecioHoraInicio:
+          type: "string"
+        PrecioHoraFin:
+          type: "string"
+        PrecioTimeFin:
+          type: "string"
+          format: "date-time"
+        PrecioValor:
+          type: "number"
+          format: "double"
+        PrecioDescuentoPorcentaje:
+          type: "number"
+          format: "double"
+        PrecioDescuentoMax:
+          type: "number"
+          format: "double"
+        Token:
+          type: "string"
+
+
+    POS.AI_API.Precios.FiltroPrecios:
+      properties:
+        CodIntValor:
+          description: "Código Interno"
+          type: "string"
+        ProductoDescripcion:
+          description: "Producto Descripcion"
+          type: "string"
+        Ubicacion:
+          description: "Precio Ubicación"
+          type: "string"
+        CategoriaPrecioIdl:
+          description: "Categoria Precio Idl"
+          type: "string"
+        PrecioCantidad:
+          description: "Precio Cantidad"
+          type: "number"
+          format: "double"
+        FechaFiltro:
+          description: "Fecha Filtro"
+          type: "string"
+          format: "date"
+        SyncTimeStamp:
+          description: "Sync Time Stamp"
+          type: "string"
+          format: "date-time"
+
+
+
+    POS.AI_API.Precios.SDTPrecios:
+      properties:
+        Empkey:
+          description: "Empresa"
+          type: "integer"
+          format: "int64"
+        ProductoKey:
+          description: "Producto Key"
+          type: "integer"
+          format: "int64"
+        CodIntValor:
+          description: "Código Interno"
+          type: "string"
+        ProductoDescripcion:
+          description: "Producto Descripcion"
+          type: "string"
+        PrecioTimeInicio:
+          description: "Precio Time Inicio"
+          type: "string"
+          format: "date-time"
+        PrecioTimeFin:
+          description: "Precio Time Fin"
+          type: "string"
+          format: "date-time"
+        PrecioHoraInicio:
+          description: "Precio Hora Inicio"
+          type: "string"
+        PrecioHoraFin:
+          description: "Precio Hora Fin"
+          type: "string"
+        PrecioUbiCod:
+          description: "Precio Ubicación"
+          type: "string"
+        Ubinom:
+          description: "Nombre Ubicacion"
+          type: "string"
+        CategoriaPrecioIdl:
+          description: "Categoria Precio Idl"
+          type: "string"
+        PrecioCantidad:
+          description: "Precio Cantidad"
+          type: "number"
+          format: "double"
+        PrecioItem:
+          description: "Precio Item"
+          type: "number"
+          format: "double"
+        PrecioDescuentoPorcentaje:
+          description: "Precio Descuento Porcentaje"
+          type: "number"
+          format: "double"
+        PrecioDescuentoMax:
+          description: "Precio Descuento Maximo"
+          type: "number"
+          format: "double"
+        PrecioUnidadMedida:
+          description: "Unidad Medida"
+          type: "string"
+
+
+
+    GeneXus.Common.Messages_Message:
+      properties:
+        Id:
+          description: "Id"
+          type: "string"
+        Type:
+          description: "Type"
+          type: "integer"
+          format: "int32"
+        Description:
+          description: "Description"
+          type: "string"
+
+
+
+    POS.AI_API.Precios.ProductoSearchSDT:
+      properties:
+        ProductoKey:
+          description: "Producto Key"
+          type: "integer"
+          format: "int64"
+        TipoCodDes:
+          description: "Tipo de Código"
+          type: "string"
+        MItemCodVal:
+          description: "Valor de Codigo"
+          type: "string"
+        ProductoDescripcion:
+          description: "Producto Descripcion"
+          type: "string"
+
+
+
+    POS.AI_API.Precios.UbicacionComboSDT:
+      properties:
+        UbiCod:
+          description: "Codigo Ubicacion"
+          type: "string"
+        UbiNom:
+          description: "Nombre Ubicacion"
+          type: "string"
+
+
+
+    POS.AI_API.Precios.FormatoItem:
+      properties:
+        Id:
+          description: "Id"
+          type: "string"
+        Descripcion:
+          description: "Descripcion"
+          type: "string"
+
+
+
+    POS.AI_API.Precios.CategoriaPrecioSDT:
+      properties:
+        CategoriaPrecioIdl:
+          description: "Categoria Precio Idl"
+          type: "string"
+        CategoriaPrecioDescripcion:
+          description: "Categoria Precio Descripcion"
+          type: "string"
+        CategoriaPrecioTipo:
+          description: "Categoria Precio Tipo"
+          type: "string"
+
+
+
+

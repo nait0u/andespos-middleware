@@ -1,0 +1,2472 @@
+openapi: 3.0.0
+info:
+  title: "xVenta"
+  description: "x Venta"
+  version: "20260708201744"
+servers:
+  - url: http://localhost:8080/AndesPOS_API2602N/POS/AI_API/Venta/xVenta
+paths:
+  /GetPantallaVentaInit:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetPantallaVentaInit"
+      summary: "GetPantallaVentaInit"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Puntoaccesokey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Notaventakey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Pmodo"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetPantallaVentaInitOutput"
+        404:
+          description: "Not found"
+
+  /GetPantallaVentaTotales:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetPantallaVentaTotales"
+      summary: "GetPantallaVentaTotales"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Puntoaccesokey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Notaventakey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetPantallaVentaTotalesOutput"
+        404:
+          description: "Not found"
+
+  /GetPantallaVentaCarrito:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetPantallaVentaCarrito"
+      summary: "GetPantallaVentaCarrito"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Puntoaccesokey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Notaventakey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetPantallaVentaCarritoOutput"
+        404:
+          description: "Not found"
+
+  /GetCartaTouchInicial:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetCartaTouchInicial"
+      summary: "GetCartaTouchInicial"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Puntoaccesokey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Categoriaidl"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCartaTouchInicialOutput"
+        404:
+          description: "Not found"
+
+  /GetProductoDetallesVenta:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetProductoDetallesVenta"
+      summary: "GetProductoDetallesVenta"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Puntoaccesokey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Mitemkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetProductoDetallesVentaOutput"
+        404:
+          description: "Not found"
+
+  /GetSelectorProductoGeneral:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetSelectorProductoGeneral"
+      summary: "GetSelectorProductoGeneral"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Puntoaccesokey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Textobusqueda"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Codigobusqueda"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSelectorProductoGeneralOutput"
+        404:
+          description: "Not found"
+
+  /GetCategoriasMenu:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetCategoriasMenu"
+      summary: "GetCategoriasMenu"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCategoriasMenuOutput"
+        404:
+          description: "Not found"
+
+  /GetSelectorFiltroCategorias:
+    post:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetSelectorFiltroCategorias"
+      summary: "GetSelectorFiltroCategorias"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetSelectorFiltroCategoriasInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSelectorFiltroCategoriasOutput"
+        404:
+          description: "Not found"
+
+  /AgregarProductoCarrito:
+    post:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.AgregarProductoCarrito"
+      summary: "AgregarProductoCarrito"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AgregarProductoCarritoInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgregarProductoCarritoOutput"
+        404:
+          description: "Not found"
+
+  /EliminarLineaCarrito:
+    delete:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.EliminarLineaCarrito"
+      summary: "EliminarLineaCarrito"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Puntoaccesokey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Notaventakey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Notaventaproductolinea"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EliminarLineaCarritoOutput"
+        404:
+          description: "Not found"
+  /AgregarBalanzaCarrito:
+    post:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.AgregarBalanzaCarrito"
+      summary: "AgregarBalanzaCarrito"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AgregarBalanzaCarritoInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgregarBalanzaCarritoOutput"
+        404:
+          description: "Not found"
+
+  /GetCatalogoUnidadesMedida:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetCatalogoUnidadesMedida"
+      summary: "GetCatalogoUnidadesMedida"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCatalogoUnidadesMedidaOutput"
+        404:
+          description: "Not found"
+
+  /GetCatalogoImpuestosEspeciales:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetCatalogoImpuestosEspeciales"
+      summary: "GetCatalogoImpuestosEspeciales"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCatalogoImpuestosEspecialesOutput"
+        404:
+          description: "Not found"
+
+  /GetCatalogoActividadesEco:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetCatalogoActividadesEco"
+      summary: "GetCatalogoActividadesEco"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCatalogoActividadesEcoOutput"
+        404:
+          description: "Not found"
+
+  /GetTratamientoTributario:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetTratamientoTributario"
+      summary: "GetTratamientoTributario"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTratamientoTributarioOutput"
+        404:
+          description: "Not found"
+
+  /EditarGlosaCabecera:
+    put:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.EditarGlosaCabecera"
+      summary: "EditarGlosaCabecera"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditarGlosaCabeceraInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeneXus.Common.Messages_Message"  
+
+        404:
+          description: "Not found"
+
+  /EditarGlosaLinea:
+    put:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.EditarGlosaLinea"
+      summary: "EditarGlosaLinea"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditarGlosaLineaInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EditarGlosaLineaOutput"
+        404:
+          description: "Not found"
+
+  /AplicarDescuentoGlobal:
+    put:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.AplicarDescuentoGlobal"
+      summary: "AplicarDescuentoGlobal"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AplicarDescuentoGlobalInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AplicarDescuentoGlobalOutput"
+        404:
+          description: "Not found"
+
+  /GetClientes:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetClientes"
+      summary: "GetClientes"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Filtrorut"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Filtronombre"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Filtrogenerico"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetClientesOutput"
+        404:
+          description: "Not found"
+
+  /AsignarCliente:
+    put:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.AsignarCliente"
+      summary: "AsignarCliente"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AsignarClienteInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AsignarClienteOutput"
+        404:
+          description: "Not found"
+
+  /CrearClienteShell:
+    post:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.CrearClienteShell"
+      summary: "CrearClienteShell"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CrearClienteShellInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CrearClienteShellOutput"
+        404:
+          description: "Not found"
+
+  /CopiarCliente:
+    post:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.CopiarCliente"
+      summary: "CopiarCliente"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CopiarClienteInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CopiarClienteOutput"
+        404:
+          description: "Not found"
+
+  /ActualizarCliente:
+    put:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.ActualizarCliente"
+      summary: "ActualizarCliente"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActualizarClienteInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeneXus.Common.Messages_Message"  
+
+        404:
+          description: "Not found"
+
+  /GetVendedores:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetVendedores"
+      summary: "GetVendedores"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Puntoaccesokey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Vendedorkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Vendedorexige"
+          in: query
+          required: false
+          schema:
+            type: "boolean"
+            
+
+        - name: "Filtroomnibox"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Filtrogenerico"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetVendedoresOutput"
+        404:
+          description: "Not found"
+
+  /GetMotivosTraslado:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetMotivosTraslado"
+      summary: "GetMotivosTraslado"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetMotivosTrasladoOutput"
+        404:
+          description: "Not found"
+
+  /GetTiposTraslado:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetTiposTraslado"
+      summary: "GetTiposTraslado"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTiposTrasladoOutput"
+        404:
+          description: "Not found"
+
+  /AsignarVendedor:
+    put:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.AsignarVendedor"
+      summary: "AsignarVendedor"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AsignarVendedorInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeneXus.Common.Messages_Message"  
+
+        404:
+          description: "Not found"
+
+  /GuardarTransportista:
+    put:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GuardarTransportista"
+      summary: "GuardarTransportista"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuardarTransportistaInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeneXus.Common.Messages_Message"  
+
+        404:
+          description: "Not found"
+
+  /SincronizarReferencias:
+    put:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.SincronizarReferencias"
+      summary: "SincronizarReferencias"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SincronizarReferenciasInput"
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeneXus.Common.Messages_Message"  
+
+        404:
+          description: "Not found"
+
+  /BuscarProductoOmnibox:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.BuscarProductoOmnibox"
+      summary: "BuscarProductoOmnibox"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Puntoaccesokey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Codigoescaneado"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BuscarProductoOmniboxOutput"
+        404:
+          description: "Not found"
+
+  /GetLotesPorProducto:
+    get:
+      tags:
+        - POS.AI_API.Venta
+      operationId: "POS.AI_API.Venta.xVenta.GetLotesPorProducto"
+      summary: "GetLotesPorProducto"
+      parameters:
+        - name: "Empkey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Puntoaccesokey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Productokey"
+          in: query
+          required: false
+          schema:
+            type: "integer"
+            format: "int64"
+
+        - name: "Token"
+          in: query
+          required: false
+          schema:
+            type: "string"
+            
+      
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetLotesPorProductoOutput"
+        404:
+          description: "Not found"
+
+components:
+  schemas:
+    GetPantallaVentaInitOutput:
+      properties:
+        SDTPantallaVentaInit:
+          description: "SDTPantalla Venta Init"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTPantallaVentaInit"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetPantallaVentaTotalesOutput:
+      properties:
+        SDTVentaTotales:
+          description: "SDTVenta Totales"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaTotales"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetPantallaVentaCarritoOutput:
+      properties:
+        SDTVentaCarrito:
+          description: "SDTVenta Carrito"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaCarrito"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetCartaTouchInicialOutput:
+      properties:
+        SDTCartaVenta:
+          description: "SDTCarta Venta"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTCartaVenta"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetProductoDetallesVentaOutput:
+      properties:
+        SDTDetalleProductoVenta:
+          description: "SDTDetalle Producto Venta"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTDetalleProductoVenta"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetSelectorProductoGeneralOutput:
+      properties:
+        MostrarBotonVer:
+          type: "boolean"
+        SDTSelectorProductoGeneral:
+          description: "Productos Selector Producto Busca"
+          type: array
+          items:
+            $ref: "#/components/schemas/Operaciones.mNotaVenta.ProductosSelectorProductoBusca"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetCategoriasMenuOutput:
+      properties:
+        ColClasificadoras:
+          description: "SDTCategoria Item"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTCategoriaItem"
+        ColBuscadoras:
+          description: "SDTCategoria Item"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTCategoriaItem"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetSelectorFiltroCategoriasOutput:
+      properties:
+        MostrarBotonVer:
+          type: "boolean"
+        SDTSelectorCategorias:
+          description: "Productos Casificadoras Buscadoras"
+          type: array
+          items:
+            $ref: "#/components/schemas/Operaciones.mNotaVenta.Items.ProductosCasificadorasBuscadoras"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    AgregarProductoCarritoOutput:
+      properties:
+        SDTVentaCarrito:
+          description: "SDTVenta Carrito"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaCarrito"
+        SDTVentaTotales:
+          description: "SDTVenta Totales"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaTotales"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    EliminarLineaCarritoOutput:
+      properties:
+        SDTVentaCarrito:
+          description: "SDTVenta Carrito"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaCarrito"
+        SDTVentaTotales:
+          description: "SDTVenta Totales"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaTotales"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    AgregarBalanzaCarritoOutput:
+      properties:
+        SDTVentaCarrito:
+          description: "SDTVenta Carrito"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaCarrito"
+        SDTVentaTotales:
+          description: "SDTVenta Totales"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaTotales"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetCatalogoUnidadesMedidaOutput:
+      properties:
+        SDTCatalogo:
+          description: "SDTCodigo Combo Box"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTCodigoComboBox"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetCatalogoImpuestosEspecialesOutput:
+      properties:
+        SDTCatalogo:
+          description: "SDTCodigo Combo Box"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTCodigoComboBox"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetCatalogoActividadesEcoOutput:
+      properties:
+        SDTCatalogo:
+          description: "SDTCodigo Combo Box"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTCodigoComboBox"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetTratamientoTributarioOutput:
+      properties:
+        SDTCatalogo:
+          description: "SDTCodigo Combo Box"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTCodigoComboBox"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+
+    EditarGlosaLineaOutput:
+      properties:
+        SDTVentaCarrito:
+          description: "SDTVenta Carrito"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaCarrito"
+        SDTVentaTotales:
+          description: "SDTVenta Totales"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaTotales"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    AplicarDescuentoGlobalOutput:
+      properties:
+        SDTVentaCarrito:
+          description: "SDTVenta Carrito"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaCarrito"
+        SDTVentaTotales:
+          description: "SDTVenta Totales"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaTotales"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetClientesOutput:
+      properties:
+        SDTClienteList:
+          description: "SDTCliente List"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTClienteList"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    AsignarClienteOutput:
+      properties:
+        CategoriaIdl:
+          type: "string"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    CrearClienteShellOutput:
+      properties:
+        ClienteKey:
+          type: "integer"
+          format: "int64"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    CopiarClienteOutput:
+      properties:
+        ClienteKeyNew:
+          type: "integer"
+          format: "int64"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+
+    GetVendedoresOutput:
+      properties:
+        SDTVendedorList:
+          description: "SDTVendedor List"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTVendedorList"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetMotivosTrasladoOutput:
+      properties:
+        SDTCatalogo:
+          description: "SDTCodigo Combo Box"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTCodigoComboBox"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetTiposTrasladoOutput:
+      properties:
+        SDTCatalogo:
+          description: "SDTCodigo Combo Box"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTCodigoComboBox"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+
+
+
+    BuscarProductoOmniboxOutput:
+      properties:
+        ProductoKey:
+          type: "integer"
+          format: "int64"
+        ModalidaVenta:
+          type: "integer"
+          format: "int32"
+        UsaLote:
+          type: "boolean"
+        VendeLote:
+          type: "boolean"
+        LoteUnicoKey:
+          type: "integer"
+          format: "int64"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetLotesPorProductoOutput:
+      properties:
+        SDTLoteList:
+          description: "SDTLote List"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTLoteList"
+        Messages:
+          description: "Messages"
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneXus.Common.Messages_Message"
+
+    GetSelectorFiltroCategoriasInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        PuntoAccesoKey:
+          type: "integer"
+          format: "int64"
+        ColCatClasificadoras:
+          description: "SDTCategoria Item"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTCategoriaItem"
+        ColCatBuscadoras:
+          description: "SDTCategoria Item"
+          type: array
+          items:
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTCategoriaItem"
+        TextoBusqueda:
+          type: "string"
+        Token:
+          type: "string"
+
+    AgregarProductoCarritoInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        PuntoAccesoKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaKey:
+          type: "integer"
+          format: "int64"
+        CategoriaIdl:
+          type: "string"
+        Accion:
+          type: "string"
+        ProductoKey:
+          type: "integer"
+          format: "int64"
+        Cantidad:
+          type: "string"
+        LoteKey:
+          type: "integer"
+          format: "int64"
+        Token:
+          type: "string"
+
+
+    AgregarBalanzaCarritoInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        PuntoAccesoKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaKey:
+          type: "integer"
+          format: "int64"
+        TramaBalanza:
+          type: "string"
+        Token:
+          type: "string"
+
+
+
+
+
+    EditarGlosaCabeceraInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        PuntoAccesoKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaGlosa:
+          type: "string"
+        Token:
+          type: "string"
+
+    EditarGlosaLineaInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        PuntoAccesoKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaProductoLinea:
+          type: "integer"
+          format: "int64"
+        NotaVentaProductoGlosaContenido:
+          type: "string"
+        LoteKey:
+          type: "integer"
+          format: "int64"
+        Token:
+          type: "string"
+
+    AplicarDescuentoGlobalInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        PuntoAccesoKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaKey:
+          type: "integer"
+          format: "int64"
+        DescuentoEsPorcentaje:
+          type: "boolean"
+        DescuentoPorcentaje:
+          type: "number"
+          format: "double"
+        DescuentoTotal:
+          type: "integer"
+          format: "int64"
+        GlosaContenido:
+          type: "string"
+        Token:
+          type: "string"
+
+
+    AsignarClienteInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        PuntoAccesoKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaKey:
+          type: "integer"
+          format: "int64"
+        ClienteKey:
+          type: "integer"
+          format: "int64"
+        Token:
+          type: "string"
+
+    CrearClienteShellInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        Token:
+          type: "string"
+
+    CopiarClienteInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        ClienteKeyOrigen:
+          type: "integer"
+          format: "int64"
+        ClientePIValorNew:
+          type: "string"
+        ClienteAddressNew:
+          type: "string"
+        ClienteComunaIDNew:
+          type: "string"
+        Token:
+          type: "string"
+
+    ActualizarClienteInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        ClienteKey:
+          type: "integer"
+          format: "int64"
+        SDTClientePayload:
+          description: "SDTCliente Payload"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTClientePayload"
+        Token:
+          type: "string"
+
+
+
+
+    AsignarVendedorInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        PuntoAccesoKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaKey:
+          type: "integer"
+          format: "int64"
+        VendedorKey:
+          type: "integer"
+          format: "int64"
+        Token:
+          type: "string"
+
+    GuardarTransportistaInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        PuntoAccesoKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaKey:
+          type: "integer"
+          format: "int64"
+        SDTTransportista:
+          description: "SDTTransportista"
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTTransportista"
+        Token:
+          type: "string"
+
+    SincronizarReferenciasInput:
+      properties:
+        EmpKey:
+          type: "integer"
+          format: "int64"
+        PuntoAccesoKey:
+          type: "integer"
+          format: "int64"
+        NotaVentaKey:
+          type: "integer"
+          format: "int64"
+        SDTReferencias:
+          description: "Referencia"
+          type: array
+          items:
+            $ref: "#/components/schemas/Operaciones.mNotaVenta.Referencias.Referencia_ReferenciaItem"
+        Token:
+          type: "string"
+
+
+
+    POS.AI_API.Venta.SDTPantallaVentaInit:
+      properties:
+        Settings:
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTPantallaVentaInit.Settings"
+
+        Permisos:
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTPantallaVentaInit.Permisos"
+
+        MetodosDePago:
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTPantallaVentaInit.MetodosDePago"
+
+        ReglaDeNegocio:
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTPantallaVentaInit.ReglaDeNegocio"
+
+        Estado:
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTPantallaVentaInit.Estado"
+
+        Actores:
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTPantallaVentaInit.Actores"
+
+        UIFlags:
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTPantallaVentaInit.UIFlags"
+
+
+    POS.AI_API.Venta.SDTPantallaVentaInit.Settings:
+      properties:
+        UsaLectorQR:
+          description: "Usa Lector QR"
+          type: "boolean"
+        PermiteCotizar:
+          description: "Permite Cotizar"
+          type: "boolean"
+        LargoMinimoCodigo:
+          description: "Largo Minimo Codigo"
+          type: "integer"
+          format: "int32"
+        TipoDocumentoDefecto:
+          description: "Tipo Documento Tributario"
+          type: "string"
+        UsaComanda:
+          description: "Usa Comanda"
+          type: "boolean"
+        UsaProductoLibre:
+          description: "Usa Producto Libre"
+          type: "boolean"
+        VentasGuiasDespacho:
+          description: "Ventas Guias Despacho"
+          type: "boolean"
+        ModificaPrecioOk:
+          description: "Modifica Precio Ok"
+          type: "boolean"
+        ModificaDescuentoOk:
+          description: "Modifica Descuento Ok"
+          type: "boolean"
+
+
+      x-gx-level: "SDTPantallaVentaInit"
+
+
+    POS.AI_API.Venta.SDTPantallaVentaInit.Permisos:
+      properties:
+        PuedeActualizar:
+          description: "Puede Actualizar"
+          type: "boolean"
+        RecibePagos:
+          description: "Recibe Pagos"
+          type: "boolean"
+        EditaVendedor:
+          description: "Edita Vendedor"
+          type: "boolean"
+        EditaGlosa:
+          description: "Edita Glosa"
+          type: "boolean"
+        TomaPedidoOk:
+          description: "Toma Pedido Ok"
+          type: "boolean"
+        DespachoOk:
+          description: "Despacho Ok"
+          type: "boolean"
+
+
+      x-gx-level: "SDTPantallaVentaInit"
+
+
+    POS.AI_API.Venta.SDTPantallaVentaInit.MetodosDePago:
+      properties:
+        EfectivoOk:
+          description: "Efectivo Ok"
+          type: "boolean"
+        TarjetaOk:
+          description: "Tarjeta Ok"
+          type: "boolean"
+        ConvenioOk:
+          description: "Convenio Ok"
+          type: "boolean"
+        TransferenciaOk:
+          description: "Transferencia Ok"
+          type: "boolean"
+        ChequeOk:
+          description: "Cheque Ok"
+          type: "boolean"
+        CreditoOk:
+          description: "Credito Ok"
+          type: "boolean"
+
+
+      x-gx-level: "SDTPantallaVentaInit"
+
+
+    POS.AI_API.Venta.SDTPantallaVentaInit.ReglaDeNegocio:
+      properties:
+        ExigeVendedorOk:
+          description: "Exige Vendedor Ok"
+          type: "boolean"
+        ChequeClienteExige:
+          description: "Cheque Cliente Exige"
+          type: "boolean"
+
+
+      x-gx-level: "SDTPantallaVentaInit"
+
+
+    POS.AI_API.Venta.SDTPantallaVentaInit.Estado:
+      properties:
+        NotaVentaEstado:
+          description: "Nota Venta Estado"
+          type: "string"
+        IsEditable:
+          description: "Is Editable"
+          type: "boolean"
+        RedirectURI:
+          description: "Redirect URI"
+          type: "string"
+        EmiteBoletaNormalOk:
+          description: "Emite Boleta Normal Ok"
+          type: "boolean"
+        CantidadComandasPendientes:
+          description: "Cantidad Comandas Pendientes"
+          type: "integer"
+          format: "int32"
+        ImprimirComandasPendientesOk:
+          description: "Imprimir Comandas Pendientes Ok"
+          type: "boolean"
+
+
+      x-gx-level: "SDTPantallaVentaInit"
+
+
+    POS.AI_API.Venta.SDTPantallaVentaInit.Actores:
+      properties:
+        ClienteKey:
+          description: "Cliente Key"
+          type: "integer"
+          format: "int64"
+        ClienteNombreCompleto:
+          description: "Nombre Completo"
+          type: "string"
+        ClienteGiro:
+          description: "Cliente Giro"
+          type: "string"
+        VendedorKey:
+          description: "Vendedor Key"
+          type: "integer"
+          format: "int64"
+        VendedorApodo:
+          description: "Vendedor Apodo"
+          type: "string"
+        VendedorEditOk:
+          description: "Vendedor Edit Ok"
+          type: "boolean"
+
+
+      x-gx-level: "SDTPantallaVentaInit"
+
+
+    POS.AI_API.Venta.SDTPantallaVentaInit.UIFlags:
+      properties:
+        PermiteEmitirGuiaVenta:
+          description: "Permite Emitir Guia Venta"
+          type: "boolean"
+        PermiteEmitirFactura:
+          description: "Permite Emitir Factura"
+          type: "boolean"
+        PermiteEmitirBoleta:
+          description: "Permite Emitir Boleta"
+          type: "boolean"
+        PermiteEmitirTicketOk:
+          description: "Permite Emitir Ticket Ok"
+          type: "boolean"
+        PermiteEmitirTicketNoTriOk:
+          description: "Permite Emitir Ticket No Tri Ok"
+          type: "boolean"
+        PermiteEmitirGuiaTraslado:
+          description: "Permite Emitir Guia Traslado"
+          type: "boolean"
+        PermiteAgregarReferencia:
+          description: "Permite Agregar Referencia"
+          type: "boolean"
+        PermiteDatosTransportista:
+          description: "Permite Datos Transportista"
+          type: "boolean"
+        MuestraDescuentoGlobalOk:
+          description: "Muestra Descuento Global Ok"
+          type: "boolean"
+        VistaInicial:
+          description: "Vista Inicial"
+          type: "string"
+        MuestraCatBuscadoraOk:
+          description: "Muestra Cat Buscadora Ok"
+          type: "boolean"
+        MuestraTotalPagosOk:
+          description: "Muestra Total Pagos Ok"
+          type: "boolean"
+        MuestraTotalVueltoOk:
+          description: "Muestra Total Vuelto Ok"
+          type: "boolean"
+        MuestraTotalBrutoOk:
+          description: "Muestra Total Bruto Ok"
+          type: "boolean"
+        PermiteEditarTipoDocTriOk:
+          description: "Permite Editar Tipo Doc Tri Ok"
+          type: "boolean"
+
+
+      x-gx-level: "SDTPantallaVentaInit"
+
+    GeneXus.Common.Messages_Message:
+      properties:
+        Id:
+          description: "Id"
+          type: "string"
+        Type:
+          description: "Type"
+          type: "integer"
+          format: "int32"
+        Description:
+          description: "Description"
+          type: "string"
+
+
+
+    POS.AI_API.Venta.SDTVentaTotales:
+      properties:
+        Montos:
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaTotales.Montos"
+
+        EstadoCarrito:
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaTotales.EstadoCarrito"
+
+        Flags:
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaTotales.Flags"
+
+
+    POS.AI_API.Venta.SDTVentaTotales.Montos:
+      properties:
+        TotalBruto:
+          description: "Nota Venta Total Bruto"
+          type: "integer"
+          format: "int64"
+        TotalPagos:
+          description: "Nota Venta Total Pagos"
+          type: "integer"
+          format: "int64"
+        Vuelto:
+          description: "Nota Venta Vuelto"
+          type: "integer"
+          format: "int64"
+        TotalLista:
+          description: "Nota Venta Total Lista"
+          type: "integer"
+          format: "int64"
+        VueltoLista:
+          description: "Nota Venta Vuelto Lista"
+          type: "integer"
+          format: "int64"
+        TotalAMostrar:
+          description: "Total AMostrar"
+          type: "integer"
+          format: "int64"
+
+
+      x-gx-level: "SDTVentaTotales"
+
+
+    POS.AI_API.Venta.SDTVentaTotales.EstadoCarrito:
+      properties:
+        ExisteProductoOk:
+          description: "Existe Producto Ok"
+          type: "boolean"
+        TieneItemLibreOk:
+          description: "Tiene Item Libre Ok"
+          type: "boolean"
+        TieneProductoTabOk:
+          description: "Tiene Producto Tab Ok"
+          type: "boolean"
+        ExisteProductoXEncargarDeliveryOk:
+          description: "Existe Producto XEncargar Delivery Ok"
+          type: "boolean"
+
+
+      x-gx-level: "SDTVentaTotales"
+
+
+    POS.AI_API.Venta.SDTVentaTotales.Flags:
+      properties:
+        MostrarTotalOk:
+          description: "Mostrar Total Ok"
+          type: "boolean"
+        MostrarPagosOk:
+          description: "Mostrar Pagos Ok"
+          type: "boolean"
+        MostrarVueltoOk:
+          description: "Mostrar Vuelto Ok"
+          type: "boolean"
+        MostrarBtnPagosOk:
+          description: "Mostrar Btn Pagos Ok"
+          type: "boolean"
+
+
+      x-gx-level: "SDTVentaTotales"
+
+    POS.AI_API.Venta.SDTVentaCarrito:
+      properties:
+        Sync:
+          $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaCarrito.Sync"
+
+        ItemsActualizados:
+          type: array
+          items:
+            description: ItemsActualizadosItem
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaCarrito.ItemsActualizados_ItemsActualizadosItem"
+
+        LineasEliminadas:
+          type: array
+          items:
+            description: LineasEliminadasItem
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTVentaCarrito.LineasEliminadas_LineasEliminadasItem"
+
+
+    POS.AI_API.Venta.SDTVentaCarrito.Sync:
+      properties:
+        TimeStamp:
+          description: "Time Stamp"
+          type: "string"
+          format: "date-time"
+
+
+      x-gx-level: "SDTVentaCarrito"
+
+
+    POS.AI_API.Venta.SDTVentaCarrito.ItemsActualizados_ItemsActualizadosItem:
+      properties:
+        Linea:
+          description: "Nota Venta Producto Linea"
+          type: "integer"
+          format: "int64"
+        ProductoKey:
+          description: "Producto Key"
+          type: "integer"
+          format: "int64"
+        CodigoInterno:
+          description: "Código Interno"
+          type: "string"
+        Descripcion:
+          description: "Descripcion"
+          type: "string"
+        UnidadMedida:
+          description: "Unidad Medida"
+          type: "string"
+        Cantidad:
+          description: "Cantidad"
+          type: "number"
+          format: "double"
+        Precio:
+          description: "Precio"
+          type: "number"
+          format: "double"
+        DescuentoMonto:
+          description: "Descuento Monto"
+          type: "integer"
+          format: "int64"
+        TotalItem:
+          description: "Nota Venta Producto Total Item"
+          type: "integer"
+          format: "int64"
+        EsNoFacturableOk:
+          description: "Es No Facturable Ok"
+          type: "boolean"
+        EditaGlosaOk:
+          description: "Edita Glosa Ok"
+          type: "boolean"
+        EsAnuladoOk:
+          description: "Es Anulado Ok"
+          type: "boolean"
+        EsDescuentoOk:
+          description: "Es Descuento Ok"
+          type: "boolean"
+
+
+      x-gx-level: "SDTVentaCarrito"
+
+
+    POS.AI_API.Venta.SDTVentaCarrito.LineasEliminadas_LineasEliminadasItem:
+      properties:
+        LineaEliminadaItem:
+          description: "Linea Eliminada Item"
+          type: "integer"
+          format: "int32"
+
+
+      x-gx-level: "SDTVentaCarrito"
+
+    POS.AI_API.Venta.SDTCartaVenta:
+      properties:
+        CartaGrupos:
+          description: "Producto Selector Touch"
+          type: array
+          items:
+            $ref: "#/components/schemas/Operaciones.mNotaVenta.Items.ProductoSelectorTouch_GrupoItem"
+
+
+
+    POS.AI_API.Venta.SDTDetalleProductoVenta:
+      properties:
+        MItemNom:
+          description: "Nombre Propio"
+          type: "string"
+        ImagenesURI:
+          description: "Imagenes URI"
+          type: "string"
+
+        StockXLocalizacion:
+          type: array
+          items:
+            description: StockXLocalizacionItem
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTDetalleProductoVenta.StockXLocalizacion_StockXLocalizacionItem"
+
+        GlosaTecnica:
+          type: array
+          items:
+            description: GlosaTecnicaItem
+            $ref: "#/components/schemas/POS.AI_API.Venta.SDTDetalleProductoVenta.GlosaTecnica_GlosaTecnicaItem"
+
+
+    POS.AI_API.Venta.SDTDetalleProductoVenta.StockXLocalizacion_StockXLocalizacionItem:
+      properties:
+        PuntoAccesoDescripcion:
+          description: "Punto Acceso Descripcion"
+          type: "string"
+        ProductoStockCantidadInventario:
+          description: "Producto Stock Cantidad Inventario"
+          type: "number"
+          format: "double"
+        PuntoAccesoStockLocalizacion:
+          description: "Punto Acceso Stock Localizacion"
+          type: "string"
+
+
+      x-gx-level: "SDTDetalleProductoVenta"
+
+
+    POS.AI_API.Venta.SDTDetalleProductoVenta.GlosaTecnica_GlosaTecnicaItem:
+      properties:
+        CategoriaNombre:
+          description: "Categoria Nombre"
+          type: "string"
+        PropiedadDescripcion:
+          description: "Propiedad Descripcion"
+          type: "string"
+        PropiedadValor:
+          description: "Propiedad Valor"
+          type: "string"
+
+
+      x-gx-level: "SDTDetalleProductoVenta"
+
+    Operaciones.mNotaVenta.ProductosSelectorProductoBusca:
+      properties:
+        EmpKey:
+          description: "Empresa"
+          type: "integer"
+          format: "int64"
+        ProductoKey:
+          description: "Producto Key"
+          type: "integer"
+          format: "int64"
+        TipoCodDes:
+          description: "Tipo de Código"
+          type: "string"
+        MItemCodVal:
+          description: "Valor de Codigo"
+          type: "string"
+        ProductoDescripcion:
+          description: "Producto Descripcion"
+          type: "string"
+        PrecioPicture:
+          description: "Precio Picture"
+          type: "string"
+        CantidadPicture:
+          description: "Cantidad Picture"
+          type: "string"
+        MItemPropiaUniItmId_:
+          description: "Unidad Propia"
+          type: "string"
+        ProductoVendeLote:
+          description: "Producto Vende Lote"
+          type: "boolean"
+        ItemInformacionAdicional:
+          description: "Item Informacion Adicional"
+          type: "string"
+
+
+
+    POS.AI_API.Venta.SDTCategoriaItem:
+      properties:
+        CatCod:
+          description: "Codigo"
+          type: "string"
+        CatNom:
+          description: "Nombre"
+          type: "string"
+
+
+
+    Operaciones.mNotaVenta.Items.ProductosCasificadorasBuscadoras:
+      properties:
+        EmpKey:
+          description: "Empresa"
+          type: "integer"
+          format: "int64"
+        MItemKey:
+          description: "Key"
+          type: "integer"
+          format: "int64"
+        MItemNom:
+          description: "Nombre Propio"
+          type: "string"
+        Codigo:
+          description: "Código"
+          type: "string"
+        Categoria:
+          description: "Categoria"
+          type: "string"
+        PrecioItem:
+          description: "Precio Item"
+          type: "number"
+          format: "double"
+        Stock:
+          description: "Cantidad"
+          type: "number"
+          format: "double"
+
+
+
+    POS.AI_API.Venta.SDTCodigoComboBox:
+      properties:
+        Codigo:
+          description: "Codigo"
+          type: "string"
+        Descripcion:
+          description: "Descripcion"
+          type: "string"
+
+
+
+    POS.AI_API.Venta.SDTClienteList:
+      properties:
+        ClienteKey:
+          description: "Cliente Key"
+          type: "integer"
+          format: "int64"
+        ClienteRUT:
+          description: "Cliente RUT"
+          type: "string"
+        ClienteNombreCompleto:
+          description: "Nombre"
+          type: "string"
+        ClienteGiro:
+          description: "Cliente Giro"
+          type: "string"
+        ClienteAddress:
+          description: "Cliente Address"
+          type: "string"
+
+
+
+    POS.AI_API.Venta.SDTClientePayload:
+      properties:
+        ClienteRUT:
+          description: "Cliente RUT"
+          type: "string"
+        ClienteGiro:
+          description: "Cliente Giro"
+          type: "string"
+        ClienteAddress:
+          description: "Cliente Address"
+          type: "string"
+        ClienteComunaId:
+          description: "Cliente Comuna ID"
+          type: "string"
+        ClienteMobilPhone:
+          description: "Teléfono Mobil"
+          type: "string"
+        ClienteEmail:
+          description: "Cliente EMail"
+          type: "string"
+        ClienteNombre:
+          description: "Nombre"
+          type: "string"
+        ClienteApellidoPaterno:
+          description: "Apellido Paterno"
+          type: "string"
+        ClienteApellidoMaterno:
+          description: "Apellido Materno"
+          type: "string"
+        ClienteRazonSocial:
+          description: "Cliente Razon Social"
+          type: "string"
+
+
+
+    POS.AI_API.Venta.SDTVendedorList:
+      properties:
+        UsuarioKey:
+          description: "Usuario Key"
+          type: "integer"
+          format: "int64"
+        UsuarioApodo:
+          description: "Apodo"
+          type: "string"
+        UsuarioPIValor:
+          description: "Identificador"
+          type: "string"
+        UsuarioNombreCompleto:
+          description: "Usuario Nombre Completo"
+          type: "string"
+
+
+
+    POS.AI_API.Venta.SDTTransportista:
+      properties:
+        NotaVentaMotivoTraslado:
+          description: "Nota Venta Motivo Traslado"
+          type: "integer"
+          format: "int32"
+        NotaVentaTipoTraslado:
+          description: "Nota Venta Tipo Traslado"
+          type: "integer"
+          format: "int32"
+        NotaVentaRutChofer:
+          description: "Nota Venta Rut Chofer"
+          type: "string"
+        NotaVentaPatente:
+          description: "Nota Venta Patente"
+          type: "string"
+        NotaVentaNombreChofer:
+          description: "Nota Venta Nombre Chofer"
+          type: "string"
+        NotaVentaSalidaFecha:
+          description: "Nota Venta Salida Fecha"
+          type: "string"
+          format: "date"
+        NotaVentaSalidaHora:
+          description: "Nota Venta Salida Hora"
+          type: "string"
+        NotaVentaLlegadaHora:
+          description: "Nota Venta Llegada Hora"
+          type: "integer"
+          format: "int32"
+        NotaVentaLlegadaFecha:
+          description: "Nota Venta Llegada Fecha"
+          type: "string"
+          format: "date"
+        NotaVentaCarroPatente:
+          description: "Nota Venta Carro Patente"
+          type: "string"
+
+
+
+    Operaciones.mNotaVenta.Referencias.Referencia_ReferenciaItem:
+      properties:
+        TipoDocumento:
+          description: "Tipo Documento"
+          type: "string"
+        Folio:
+          description: "Folio"
+          type: "string"
+        Fecha:
+          description: "Fecha"
+          type: "string"
+          format: "date"
+        Razon:
+          description: "Razon"
+          type: "string"
+
+
+
+    POS.AI_API.Venta.SDTLoteList:
+      properties:
+        LoteKey:
+          description: "Lote Id"
+          type: "integer"
+          format: "int64"
+        LoteCodigo:
+          description: "Código de Lote"
+          type: "string"
+        LoteCaducaFecha:
+          description: "Fecha Caducidad"
+          type: "string"
+          format: "date"
+        CantidadInventario:
+          description: "Cantidad Inventario"
+          type: "integer"
+          format: "int32"
+
+
+
+    Operaciones.mNotaVenta.Items.ProductoSelectorTouch_GrupoItem:
+      properties:
+        GrupoSelectorIdentificador:
+          description: "Grupo Selector Identificador"
+          type: "string"
+        GrupoSelectorDescripcion:
+          description: "Grupo Selector Descripcion"
+          type: "string"
+        GrupoSelectorTouchSelector:
+          description: "Grupo Selector Touch Selector"
+          type: "boolean"
+        GrupoSelectorOrden:
+          description: "Grupo Selector Orden"
+          type: "integer"
+          format: "int64"
+
+        Productos:
+          type: array
+          items:
+            description: ProductosItem
+            $ref: "#/components/schemas/Operaciones.mNotaVenta.Items.ProductoSelectorTouch.Productos_ProductosItem"
+
+
+    Operaciones.mNotaVenta.Items.ProductoSelectorTouch.Productos_ProductosItem:
+      properties:
+        ProductoKey:
+          description: "Producto Key"
+          type: "integer"
+          format: "int64"
+        ProductoCodigo:
+          description: "Producto Codigo"
+          type: "string"
+        ProductoDescripcion:
+          description: "Producto Descripcion"
+          type: "string"
+        ProductoUnidadMedida:
+          description: "Producto Unidad Medida"
+          type: "string"
+        ProductoUnidadMedida2a:
+          description: "Producto Segunda Unidad Medida"
+          type: "string"
+        ProductoTratamientoTributario:
+          description: "Producto Tratamiento Tributario"
+          type: "string"
+        ProductoActEcoCod:
+          description: "Producto Act Eco Cod"
+          type: "integer"
+          format: "int64"
+        ProductoActEcoDescripcion:
+          description: "Producto Act Eco Descripcion"
+          type: "string"
+        ProductoStock:
+          description: "Producto Stock"
+          type: "number"
+          format: "double"
+        ProductoPrecios:
+          description: "Producto Precios"
+          type: "string"
+        ProductoModalidadVenta:
+          description: "Producto Modalidad Venta"
+          type: "integer"
+          format: "int32"
+        ProductoTieneStock:
+          description: "Producto Tiene Stock"
+          type: "boolean"
+        ProductoVendeLote:
+          description: "Producto Vende Lote"
+          type: "boolean"
+        ItemInformacionAdicional:
+          description: "Item Informacion Adicional"
+          type: "string"
+
+
+      x-gx-level: "ProductoSelectorTouch"
+
+
