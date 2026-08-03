@@ -3,8 +3,9 @@ import { Type } from 'class-transformer';
 
 export class GetCartaTouchDto {
   @IsOptional()
-  @IsString()
-  categoriaIdl?: string;
+  @Type(() => Number)
+  @IsInt()
+  notaVentaKey?: number;
 }
 
 export class GetProductoDetallesDto {

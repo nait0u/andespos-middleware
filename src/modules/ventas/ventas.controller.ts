@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Body,
   Query,
   UseGuards,
@@ -26,6 +27,7 @@ import {
   FiltroCategoriasDto,
 } from './dto/catalogo-venta.dto.js';
 import { EstadoCajaResponseDto } from './dto/estado-caja.dto.js';
+import { GetClientesDto, AsignarClienteDto } from './dto/clientes.dto.js';
 import type {
   GxSelectorProductoGeneralItem,
   GxProductoCasificadoraBuscadoraItem,
@@ -263,10 +265,9 @@ export class VentasController {
   }
 
   /**
-   * GET /ventas/pantalla/carta-touch?categoriaIdl=
+   * GET /ventas/pantalla/carta-touch?notaVentaKey=
    *
-   * Carta touch para selección de productos. categoriaIdl es opcional;
-   * si se omite, GeneXus retorna la carta desde la raíz.
+   * Carta touch para selección de productos. notaVentaKey es opcional.
    */
   @Get('pantalla/carta-touch')
   async getCartaTouch(
@@ -290,7 +291,7 @@ export class VentasController {
           productoActEcoCod: Number(p.ProductoActEcoCod),
           productoActEcoDescripcion: p.ProductoActEcoDescripcion,
           productoStock: Number(p.ProductoStock),
-          productoPrecios: p.ProductoPrecios,
+          productoPrecios: this.sanitizarProductoPrecios(p.ProductoPrecios),
           productoModalidadVenta: Number(p.ProductoModalidadVenta),
           productoTieneStock: p.ProductoTieneStock,
           productoVendeLote: p.ProductoVendeLote,
@@ -382,6 +383,44 @@ export class VentasController {
   }
 
   /**
+   * GET /ventas/clientes?filtroRut=&filtroNombre=&filtroGenerico=
+   *
+   * Búsqueda de clientes por RUT, nombre o filtro genérico. El front NO debe
+   * llamar a GeneXus directamente para esto — pasa siempre por este BFF.
+   */
+  @Get('clientes')
+  async getClientes(
+    @Query() query: GetClientesDto,
+    @ContextoPOS() ctx: IPosContext,
+  ) {
+    const gx = await this.ventasService.obtenerClientes(ctx, query);
+    return {
+      clientes: (gx.SDTClienteList ?? []).map((c) => ({
+        clienteKey: Number(c.ClienteKey),
+        clienteRut: c.ClienteRUT,
+        clienteNombreCompleto: c.ClienteNombreCompleto,
+        clienteGiro: c.ClienteGiro,
+        clienteAddress: c.ClienteAddress,
+        clientePIValor: c.ClientePIValor,
+      })),
+    };
+  }
+
+  /**
+   * PUT /ventas/clientes/asignar
+   *
+   * Asigna un cliente existente a la NotaVenta activa.
+   */
+  @Put('clientes/asignar')
+  async putAsignarCliente(
+    @Body() dto: AsignarClienteDto,
+    @ContextoPOS() ctx: IPosContext,
+  ) {
+    const gx = await this.ventasService.asignarCliente(ctx, dto);
+    return { categoriaIdl: gx.CategoriaIdl };
+  }
+
+  /**
    * GetSelectorProductoGeneral — PrecioPicture/CantidadPicture son strings
    * "Picture" de GeneXus (ya formateados para mostrar); NO se parsean con
    * Number(), se exponen tal cual al frontend.
@@ -398,6 +437,20 @@ export class VentasController {
       productoVendeLote: p.ProductoVendeLote,
       itemInformacionAdicional: p.ItemInformacionAdicional,
     }));
+  }
+
+  /**
+   * GeneXus a veces retorna 'PreciosX' (string por defecto sin dato real)
+   * o el precio crudo sin formato (ej. '4500.000000'); acá se normaliza a
+   * moneda chilena o '$ 0' si no hay precio.
+   */
+  private sanitizarProductoPrecios(valor: unknown): string {
+    if (valor == null || valor === 'PreciosX') return '$ 0';
+
+    const precioNum = Number(valor);
+    if (Number.isNaN(precioNum)) return '$ 0';
+
+    return `$ ${Math.round(precioNum).toLocaleString('es-CL')}`;
   }
 
   /**

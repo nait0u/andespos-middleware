@@ -388,3 +388,32 @@ export interface GxFiltroCategoriasResponse {
   SDTSelectorCategorias: GxProductoCasificadoraBuscadoraItem[];
   Messages: GxMessage[];
 }
+
+// ================================================================
+//  xVenta — Clientes
+// ================================================================
+
+export interface GxClienteListItem {
+  ClienteKey: number;
+  ClienteRUT: string;
+  ClienteNombreCompleto: string;
+  ClienteGiro: string;
+  ClienteAddress: string;
+  ClientePIValor: string;
+}
+
+/**
+ * Respuesta de POS/AI_API/Venta/xVenta/GetClientes
+ */
+export interface GxClientesResponse {
+  SDTClienteList: GxClienteListItem[];
+  Messages: GxMessage[];
+}
+
+/**
+ * Respuesta de POS/AI_API/Venta/xVenta/AsignarCliente
+ */
+export interface GxAsignarClienteResponse {
+  CategoriaIdl: string;
+  Messages: GxMessage[];
+}

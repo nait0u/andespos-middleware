@@ -30,6 +30,8 @@ import type {
   GxCategoriasMenuCacheEntry,
   GxCategoriasMenuPaginadoResponse,
   GxFiltroCategoriasResponse,
+  GxClientesResponse,
+  GxAsignarClienteResponse,
 } from './interfaces/ventas.interfaces.js';
 import type {
   PantallaVentaInitDto,
@@ -41,6 +43,7 @@ import type {
   GetSelectorGeneralDto,
   FiltroCategoriasDto,
 } from './dto/catalogo-venta.dto.js';
+import type { GetClientesDto, AsignarClienteDto } from './dto/clientes.dto.js';
 
 @Injectable()
 export class VentasService {
@@ -62,6 +65,8 @@ export class VentasService {
     SELECTOR_GENERAL: 'POS/AI_API/Venta/xVenta/GetSelectorProductoGeneral',
     CATEGORIAS_MENU: 'POS/AI_API/Venta/xVenta/GetCategoriasMenu',
     FILTRO_CATEGORIAS: 'POS/AI_API/Venta/xVenta/GetSelectorFiltroCategorias',
+    CLIENTES: 'POS/AI_API/Venta/xVenta/GetClientes',
+    ASIGNAR_CLIENTE: 'POS/AI_API/Venta/xVenta/AsignarCliente',
   } as const;
 
   constructor(
@@ -328,7 +333,7 @@ export class VentasService {
       {
         Empkey: ctx.EmpKey,
         Puntoaccesokey: ctx.PuntoAccesoKey,
-        Categoriaidl: dto.categoriaIdl,
+        Notaventakey: dto.notaVentaKey ?? 0,
         Token: this.tokenParaEmpresa(ctx),
       },
       'GET',
@@ -509,6 +514,71 @@ export class VentasService {
     this.throwIfErrors(response.Messages, 'GetSelectorFiltroCategorias');
     this.logger.log(
       `[SessionHandler] GetSelectorFiltroCategorias OK — Dispositivo:${ctx.DispositivoId}`,
+    );
+    return response;
+  }
+
+  // ================================================================
+  //  GetClientes
+  // ================================================================
+
+  async obtenerClientes(
+    ctx: IPosContext,
+    dto: GetClientesDto,
+  ): Promise<GxClientesResponse> {
+    this.logger.log(
+      `[SessionHandler] GetClientes → Emp:${ctx.EmpKey} Dispositivo:${ctx.DispositivoId}`,
+    );
+
+    const response = await this.genexusClient.request<GxClientesResponse>(
+      VentasService.GX_XVENTA.CLIENTES,
+      {
+        Empkey: ctx.EmpKey,
+        Filtrorut: dto.filtroRut,
+        Filtronombre: dto.filtroNombre,
+        Filtrogenerico: dto.filtroGenerico,
+        Token: this.tokenParaEmpresa(ctx),
+      },
+      'GET',
+      { target: 'pos', contexto: ctx },
+    );
+
+    this.throwIfErrors(response.Messages, 'GetClientes');
+    this.logger.log(
+      `[SessionHandler] GetClientes OK — Dispositivo:${ctx.DispositivoId}`,
+    );
+    return response;
+  }
+
+  // ================================================================
+  //  AsignarCliente
+  // ================================================================
+
+  async asignarCliente(
+    ctx: IPosContext,
+    dto: AsignarClienteDto,
+  ): Promise<GxAsignarClienteResponse> {
+    this.logger.log(
+      `[SessionHandler] AsignarCliente → Cliente:${dto.clienteKey} NotaVenta:${dto.notaVentaKey} Emp:${ctx.EmpKey} Dispositivo:${ctx.DispositivoId}`,
+    );
+
+    const response =
+      await this.genexusClient.request<GxAsignarClienteResponse>(
+        VentasService.GX_XVENTA.ASIGNAR_CLIENTE,
+        {
+          EmpKey: ctx.EmpKey,
+          PuntoAccesoKey: ctx.PuntoAccesoKey,
+          NotaVentaKey: dto.notaVentaKey,
+          ClienteKey: dto.clienteKey,
+          Token: this.tokenParaEmpresa(ctx),
+        },
+        'PUT',
+        { target: 'pos', contexto: ctx },
+      );
+
+    this.throwIfErrors(response.Messages, 'AsignarCliente');
+    this.logger.log(
+      `[SessionHandler] AsignarCliente OK — Cliente:${dto.clienteKey} Dispositivo:${ctx.DispositivoId}`,
     );
     return response;
   }

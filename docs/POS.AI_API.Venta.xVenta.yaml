@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: "xVenta"
   description: "x Venta"
-  version: "20260708201744"
+  version: "20260714133505"
 servers:
   - url: http://localhost:8080/AndesPOS_API2602N/POS/AI_API/Venta/xVenta
 paths:
@@ -169,12 +169,12 @@ paths:
             type: "integer"
             format: "int64"
 
-        - name: "Categoriaidl"
+        - name: "Notaventakey"
           in: query
           required: false
           schema:
-            type: "string"
-            
+            type: "integer"
+            format: "int64"
 
         - name: "Token"
           in: query
@@ -2259,6 +2259,9 @@ components:
           type: "string"
         ClienteAddress:
           description: "Cliente Address"
+          type: "string"
+        ClientePIValor:
+          description: "Valor Identificador"
           type: "string"
 
 
