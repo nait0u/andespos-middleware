@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 import { GenexusClientModule } from '../../core/genexus-client/genexus-client.module.js';
-import { DeviceModule } from '../device/device.module.js';
+import { DispositivoModule } from '@andestec/api-dispositivos';
 import { PosContextGuard } from '../../common/guards/pos-context.guard.js';
 import { VentasService } from './ventas.service.js';
 import { VentasController } from './ventas.controller.js';
@@ -9,7 +9,7 @@ import { VentasController } from './ventas.controller.js';
 @Module({
   imports: [
     GenexusClientModule, // VentasService → GenexusClientService
-    DeviceModule, // PosContextGuard → DeviceService
+    DispositivoModule, // PosContextGuard → TokenService
     CacheModule.register({ ttl: 3600000 }),
   ],
   providers: [VentasService, PosContextGuard],

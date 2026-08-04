@@ -1,6 +1,6 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { GenexusClientService } from '../../core/genexus-client/genexus-client.service.js';
-import { DeviceService } from '../device/device.service.js';
+import { TokenService } from '@andestec/api-dispositivos';
 import { PosProductosService } from '../pos-productos/pos-productos.service.js';
 import type { IPosContext } from '../../common/interfaces/pos-context.interface.js';
 import {
@@ -44,14 +44,14 @@ export class PosCarritoService {
 
   constructor(
     private readonly genexusClient: GenexusClientService,
-    private readonly deviceService: DeviceService,
+    private readonly tokenService: TokenService,
     private readonly productosService: PosProductosService,
   ) {}
 
   // Token firmado con strControl = EmpKey — misma convención que VentasService/ClientesService.
   private tokenParaEmpresa(ctx: IPosContext): string {
     const strControl = String(ctx.EmpKey).trim();
-    const token = this.deviceService.tokenGen(strControl);
+    const token = this.tokenService.TokenGen(strControl);
     if (!token)
       throw new Error(`No se pudo generar token para strControl=${strControl}`);
     return token;

@@ -6,7 +6,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { GenexusClientService } from '../../core/genexus-client/genexus-client.service.js';
-import { DeviceService } from '../device/device.service.js';
+import { TokenService } from '@andestec/api-dispositivos';
 import { ParameterService } from '../parameter/parameter.service.js';
 import type { IPosContext } from '../../common/interfaces/pos-context.interface.js';
 import type { GxMessage } from '../../common/interfaces/parameter.interfaces.js';
@@ -49,7 +49,7 @@ export class PreciosService {
 
   constructor(
     private readonly genexusClient: GenexusClientService,
-    private readonly deviceService: DeviceService,
+    private readonly tokenService: TokenService,
     private readonly parameterService: ParameterService,
   ) {}
 
@@ -58,7 +58,7 @@ export class PreciosService {
   // GetProductosBuscador, GetFormatosUpload, UploadPreciosNativo).
   private tokenParaEmpresa(ctx: IPosContext): string {
     const strControl = String(ctx.EmpKey).trim();
-    const token = this.deviceService.tokenGen(strControl);
+    const token = this.tokenService.TokenGen(strControl);
     if (!token) throw new Error(`No se pudo generar token para strControl=${strControl}`);
     return token;
   }
@@ -67,7 +67,7 @@ export class PreciosService {
   // GuardarPrecioAPI, CaducarPrecio y CrearPrecioNuevo en GeneXus.
   private tokenParaProducto(ctx: IPosContext, productoKey: number): string {
     const strControl = String(ctx.EmpKey).trim() + String(productoKey).trim();
-    const token = this.deviceService.tokenGen(strControl);
+    const token = this.tokenService.TokenGen(strControl);
     if (!token) throw new Error(`No se pudo generar token para strControl=${strControl}`);
     return token;
   }

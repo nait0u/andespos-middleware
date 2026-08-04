@@ -4,17 +4,15 @@ import {
   InternalServerErrorException,
   BadGatewayException,
   GatewayTimeoutException,
-  Inject,
-  forwardRef,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { join } from 'path';
 import { readFileSync } from 'fs';
+import { TokenService } from '@andestec/api-dispositivos';
 import type { DeviceConfig } from '../../common/interfaces/device.interfaces.js';
 import type { IPosContext } from '../../common/interfaces/pos-context.interface.js';
 import { PERFIL_CONFIG } from '../../common/constants/perfil-config.js';
-import { DeviceService } from '../../modules/device/device.service.js';
 
 export interface GxRequestOptions {
   headers?: Record<string, string>;
@@ -45,8 +43,7 @@ export class GenexusClientService {
 
   constructor(
     private readonly httpService: HttpService,
-    @Inject(forwardRef(() => DeviceService))
-    private readonly deviceService: DeviceService,
+    private readonly tokenService: TokenService,
   ) {}
 
   // ================================================================
@@ -162,7 +159,7 @@ export class GenexusClientService {
     // Token B2B requerido por InicializarContexto — strControl = RutEmpresa + RutUsuario
     // (lo que GeneXus reconstruye en APIDispositivos.TokenVal para validar el hash).
     const token =
-      this.deviceService.tokenGen(
+      this.tokenService.TokenGen(
         `${perfilConfig.RutEmpresa}${perfilConfig.RutUsuario}`,
       ) ?? '';
     if (!token) {

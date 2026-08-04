@@ -9,7 +9,7 @@ import {
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';
 import { GenexusClientService } from '../../core/genexus-client/genexus-client.service.js';
-import { DeviceService } from '../device/device.service.js';
+import { TokenService } from '@andestec/api-dispositivos';
 import type { IPosContext } from '../../common/interfaces/pos-context.interface.js';
 import type { GxMessage } from '../../common/interfaces/parameter.interfaces.js';
 import type { FiltrosVentasDto } from './dto/filtros-ventas.dto.js';
@@ -71,14 +71,14 @@ export class VentasService {
 
   constructor(
     private readonly genexusClient: GenexusClientService,
-    private readonly deviceService: DeviceService,
+    private readonly tokenService: TokenService,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
   // Token firmado con strControl = EmpKey — convención xVenta para todos los endpoints.
   private tokenParaEmpresa(ctx: IPosContext): string {
     const strControl = String(ctx.EmpKey).trim();
-    const token = this.deviceService.tokenGen(strControl);
+    const token = this.tokenService.TokenGen(strControl);
     if (!token)
       throw new Error(`No se pudo generar token para strControl=${strControl}`);
     return token;

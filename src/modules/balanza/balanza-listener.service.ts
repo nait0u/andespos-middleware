@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { watch, readFileSync, type FSWatcher } from 'fs';
 import { GenexusClientService } from '../../core/genexus-client/genexus-client.service.js';
-import { DeviceService } from '../device/device.service.js';
+import { TokenService } from '@andestec/api-dispositivos';
 import { BalanzaContextStore } from './balanza-context.store.js';
 import { BalanzaGateway } from './balanza.gateway.js';
 import { mapVentaCarritoDelta } from '../../common/helpers/venta-carrito-delta.mapper.js';
@@ -43,7 +43,7 @@ export class BalanzaListenerService implements OnModuleInit, OnModuleDestroy {
 
   constructor(
     private readonly genexusClient: GenexusClientService,
-    private readonly deviceService: DeviceService,
+    private readonly tokenService: TokenService,
     private readonly contextStore: BalanzaContextStore,
     private readonly gateway: BalanzaGateway,
   ) {}
@@ -112,7 +112,7 @@ export class BalanzaListenerService implements OnModuleInit, OnModuleDestroy {
     );
 
     try {
-      const token = this.deviceService.tokenGen(String(ctx.EmpKey).trim());
+      const token = this.tokenService.TokenGen(String(ctx.EmpKey).trim());
       if (!token)
         throw new Error(`No se pudo generar token para EmpKey=${ctx.EmpKey}`);
 

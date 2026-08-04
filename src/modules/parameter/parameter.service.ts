@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { join } from 'path';
 import { readFileSync, writeFileSync, mkdirSync, statSync } from 'fs';
 import { createHmac } from 'crypto';
-import { DeviceService } from '../device/device.service.js';
+import { DispositivoService, TokenService } from '@andestec/api-dispositivos';
 import type {
   ParameterConfig,
   ParameterValuesParams,
@@ -34,7 +34,8 @@ export class ParameterService {
 
   constructor(
     private readonly httpService: HttpService,
-    private readonly deviceService: DeviceService,
+    private readonly dispositivoService: DispositivoService,
+    private readonly tokenService: TokenService,
   ) {}
 
   // ================================================================
@@ -123,11 +124,11 @@ export class ParameterService {
   }
 
   // ================================================================
-  //  API KEY  (wrapper de DeviceService.tokenGen)
+  //  API KEY  (wrapper de TokenService.TokenGen)
   // ================================================================
 
   generarApiKey(strControl: string): string | null {
-    return this.deviceService.tokenGen(strControl);
+    return this.tokenService.TokenGen(strControl);
   }
 
   // ================================================================
@@ -406,7 +407,7 @@ export class ParameterService {
   ): Promise<SDTParametrosValuesApp> {
     // AmbienteId siempre debe venir del dispositivo si no se provee
     if (!params.AmbienteId) {
-      const ambienteId = await this.deviceService.getDispositivoAmbiente();
+      const ambienteId = await this.dispositivoService.GetDispositivoAmbiente();
       if (ambienteId) {
         params.AmbienteId = ambienteId;
         this.logger.log(

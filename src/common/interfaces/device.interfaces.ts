@@ -30,21 +30,3 @@ export interface SDTDispositivoInformacion {
   Aplicacion: Record<string, unknown>[];
 }
 
-/** Resultado de la validacion de un token */
-export interface TokenValidationResult {
-  valido: boolean;
-  mensaje: string;
-  dispositivoId: string;
-}
-
-/** Respuesta del servicio GetDispositivoClave de GeneXus */
-export interface DeviceClaveResponse {
-  DispositivoClave?: string;
-  Password?: string;
-  password?: string;
-}
-
-/** Respuesta del servicio GetDispositivoInformacion de GeneXus */
-export interface DeviceInformacionResponse {
-  DispositivoInformacion?: string;
-}

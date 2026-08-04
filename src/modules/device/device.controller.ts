@@ -1,11 +1,15 @@
 import { Controller, Get, Logger } from '@nestjs/common';
-import { DeviceService } from './device.service.js';
+import { DispositivoService, TokenService } from '@andestec/api-dispositivos';
+import type { SDTDispositivoInformacion } from '../../common/interfaces/device.interfaces.js';
 
 @Controller('device')
 export class DeviceController {
   private readonly logger = new Logger(DeviceController.name);
 
-  constructor(private readonly deviceService: DeviceService) {}
+  constructor(
+    private readonly dispositivoService: DispositivoService,
+    private readonly tokenService: TokenService,
+  ) {}
 
   /**
    * GET /device/info
@@ -15,8 +19,8 @@ export class DeviceController {
   async getDispositivoInformacion() {
     this.logger.log('Test: obteniendo informacion del dispositivo...');
 
-    const dispositivoId = this.deviceService.getDispositivoId();
-    const info = await this.deviceService.leerArchivoDispositivoInformacion();
+    const dispositivoId = this.dispositivoService.GetDispositivoId();
+    const info = (await this.dispositivoService.LeerArchivoDispositivoInformacion()) as SDTDispositivoInformacion | null;
 
     return {
       ok: !!info,
@@ -27,18 +31,17 @@ export class DeviceController {
 
   /**
    * GET /device/id
-   * Prueba la lectura y desencriptacion del DispositivoId desde DispInfo.txt.
+   * Prueba la lectura del DispositivoId (env DISPOSITIVO_ID).
    */
   @Get('id')
   getDispositivoId() {
     this.logger.log('Test: leyendo DispositivoId...');
 
-    const id = this.deviceService.getDispositivoId();
+    const id = this.dispositivoService.GetDispositivoId();
 
     return {
       ok: !!id,
       dispositivoId: id,
-      pathDispositivo: this.deviceService.getPathDispositivo(),
     };
   }
 
@@ -50,14 +53,13 @@ export class DeviceController {
   getToken() {
     this.logger.log('Test: generando token...');
 
-    const dispositivoId = this.deviceService.getDispositivoId();
-    const token = this.deviceService.tokenGen(dispositivoId ?? '');
+    const dispositivoId = this.dispositivoService.GetDispositivoId();
+    const token = this.tokenService.TokenGen(dispositivoId ?? '');
 
     return {
       ok: !!token,
       dispositivoId,
       token,
-      timestamp: this.deviceService.getTimestampXML(),
     };
   }
 }

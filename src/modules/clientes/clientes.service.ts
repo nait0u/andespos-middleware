@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { GenexusClientService } from '../../core/genexus-client/genexus-client.service.js';
-import { DeviceService } from '../device/device.service.js';
+import { TokenService } from '@andestec/api-dispositivos';
 import type { IPosContext } from '../../common/interfaces/pos-context.interface.js';
 import type { GxMessage } from '../../common/interfaces/parameter.interfaces.js';
 import type { GuardarClienteDto } from './dto/guardar-cliente.dto.js';
@@ -41,13 +41,13 @@ export class ClientesService {
 
   constructor(
     private readonly genexusClient: GenexusClientService,
-    private readonly deviceService: DeviceService,
+    private readonly tokenService: TokenService,
   ) {}
 
   // Token firmado con strControl = EmpKey — convención xCliente GET endpoints.
   private tokenParaEmpresa(ctx: IPosContext): string {
     const strControl = String(ctx.EmpKey).trim();
-    const token = this.deviceService.tokenGen(strControl);
+    const token = this.tokenService.TokenGen(strControl);
     if (!token) throw new Error(`No se pudo generar token para strControl=${strControl}`);
     return token;
   }
@@ -55,7 +55,7 @@ export class ClientesService {
   // Token firmado con strControl = "0" — convención xCliente POST endpoints (GetListaClientesPreVenta).
   // GeneXus valida este token con strControl numérico 0 (nivel dispositivo, sin contexto empresa).
   private tokenDispositivo(): string {
-    const token = this.deviceService.tokenGen('0');
+    const token = this.tokenService.TokenGen('0');
     if (!token) throw new Error('No se pudo generar token de dispositivo (strControl=0)');
     return token;
   }

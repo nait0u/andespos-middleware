@@ -1,6 +1,6 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { GenexusClientService } from '../../core/genexus-client/genexus-client.service.js';
-import { DeviceService } from '../device/device.service.js';
+import { TokenService } from '@andestec/api-dispositivos';
 import type { IPosContext } from '../../common/interfaces/pos-context.interface.js';
 import { throwGxHttpError } from '../../common/helpers/gx-error-mapper.helper.js';
 import type {
@@ -27,12 +27,12 @@ export class PosProductosService {
 
   constructor(
     private readonly genexusClient: GenexusClientService,
-    private readonly deviceService: DeviceService,
+    private readonly tokenService: TokenService,
   ) {}
 
   private tokenParaEmpresa(ctx: IPosContext): string {
     const strControl = String(ctx.EmpKey).trim();
-    const token = this.deviceService.tokenGen(strControl);
+    const token = this.tokenService.TokenGen(strControl);
     if (!token)
       throw new Error(`No se pudo generar token para strControl=${strControl}`);
     return token;

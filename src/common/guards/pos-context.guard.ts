@@ -6,8 +6,9 @@ import {
   Logger,
 } from '@nestjs/common';
 import type { Request } from 'express';
-import { DeviceService } from '../../modules/device/device.service.js';
+import { DispositivoService, TokenService } from '@andestec/api-dispositivos';
 import type { IPosContext } from '../interfaces/pos-context.interface.js';
+import type { SDTDispositivoInformacion } from '../interfaces/device.interfaces.js';
 
 interface PosRequest extends Request {
   posContext: IPosContext;
@@ -34,7 +35,7 @@ interface PosUserHeader {
  *
  *  PATH A — Token M2406 (dispositivo físico / producción):
  *    Header: x-pos-token: <M2406>
- *    Valida con DeviceService.tokenVal(). Extrae DispositivoId del token.
+ *    Valida con TokenService.TokenVal(). Extrae DispositivoId del token.
  *    Campos de usuario quedan vacíos (no están codificados en M2406).
  *
  *  PATH B — Usuario directo (desarrollo / pre-JWT):
@@ -49,7 +50,10 @@ interface PosUserHeader {
 export class PosContextGuard implements CanActivate {
   private readonly logger = new Logger(PosContextGuard.name);
 
-  constructor(private readonly deviceService: DeviceService) {}
+  constructor(
+    private readonly dispositivoService: DispositivoService,
+    private readonly tokenService: TokenService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<PosRequest>();
@@ -85,13 +89,14 @@ export class PosContextGuard implements CanActivate {
       process.env.POS_DEV_EMP_KEY ??
       '0';
 
-    const validacion = await this.deviceService.tokenVal(token, empKeyRaw.trim());
+    const validacion = await this.tokenService.TokenVal(token, empKeyRaw.trim());
     if (!validacion.valido) {
       this.logger.warn(`Token M2406 rechazado [${validacion.dispositivoId}]: ${validacion.mensaje}`);
       throw new UnauthorizedException(validacion.mensaje);
     }
 
-    const dispositivoInfo = await this.deviceService.leerArchivoDispositivoInformacion();
+    const dispositivoInfo =
+      (await this.dispositivoService.LeerArchivoDispositivoInformacion()) as SDTDispositivoInformacion | null;
     if (!dispositivoInfo) {
       throw new UnauthorizedException(
         'No se pudo verificar la información del dispositivo emparejado',
