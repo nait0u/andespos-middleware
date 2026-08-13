@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DispositivoModule } from '@andestec/api-dispositivos';
+import { ParametrosModule } from '@andestec/api-parametros';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { DeviceModule } from './modules/device/device.module.js';
 import { ParameterModule } from './modules/parameter/parameter.module.js';
 import { SessionModule } from './modules/session/session.module.js';
+import { SetsessionModule } from './modules/setsession/setsession.module.js';
 import { VentasModule } from './modules/ventas/ventas.module.js';
 import { PreciosModule } from './modules/precios/precios.module.js';
 import { PocSessionModule } from './modules/poc-session/poc-session.module.js';
@@ -22,9 +24,11 @@ import { BalanzaModule } from './modules/balanza/balanza.module.js';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     DispositivoModule,
+    ParametrosModule,
     DeviceModule,
     ParameterModule,
     SessionModule,
+    SetsessionModule,
     VentasModule,
     PreciosModule,
     PocSessionModule,

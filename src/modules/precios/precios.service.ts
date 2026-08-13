@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { GenexusClientService } from '../../core/genexus-client/genexus-client.service.js';
 import { TokenService } from '@andestec/api-dispositivos';
-import { ParameterService } from '../parameter/parameter.service.js';
+import { ParametrosService } from '@andestec/api-parametros';
 import type { IPosContext } from '../../common/interfaces/pos-context.interface.js';
 import type { GxMessage } from '../../common/interfaces/parameter.interfaces.js';
 import type { FiltrosPreciosDto } from './dto/filtros-precios.dto.js';
@@ -50,7 +50,7 @@ export class PreciosService {
   constructor(
     private readonly genexusClient: GenexusClientService,
     private readonly tokenService: TokenService,
-    private readonly parameterService: ParameterService,
+    private readonly parametrosService: ParametrosService,
   ) {}
 
   // Token firmado con strControl = EmpKey — convención para reads y operaciones
@@ -380,18 +380,16 @@ export class PreciosService {
     // El valor del parámetro es una lista serializada "ID,Desc;ID,Desc" — no un input para GeneXus.
     // Se parsea directamente desde el sistema de parámetros (Aplicacion_Idl="ServidorPOS").
     if (parametroId) {
-      const valoresResp = await this.parameterService.obtenerParametrosValues({
-        Empkey: ctx.EmpKey,
-        Aplicacion_Idl: 'ServidorPOS',
-        ParametroId: parametroId,
+      const valor = await this.parametrosService.GetParametro(parametroId, {
+        aplicacionId: 'ServidorPOS',
+        empKey: ctx.EmpKey,
+        alcanceId: ctx.DispositivoId,
+        modo: 'WebApp',
       });
-      const item = valoresResp?.ParametrosValuesApp?.ParametroValueArray?.find(
-        (p) => p.ParametroId === parametroId,
-      );
 
-      if (item?.ValorParametroValor) {
+      if (valor) {
         // Formato: "ID,Descripcion;ID,Descripcion;..."
-        const FormatosList = item.ValorParametroValor
+        const FormatosList = valor
           .split(';')
           .filter(Boolean)
           .map((entry) => {

@@ -1,6 +1,5 @@
 import { Controller, Get, Logger } from '@nestjs/common';
 import { DispositivoService, TokenService } from '@andestec/api-dispositivos';
-import { ParameterService } from '../parameter/parameter.service.js';
 import type { SessionContext } from '../../common/interfaces/session.interfaces.js';
 import type { SDTDispositivoInformacion } from '../../common/interfaces/device.interfaces.js';
 
@@ -11,13 +10,12 @@ export class SessionController {
   constructor(
     private readonly dispositivoService: DispositivoService,
     private readonly tokenService: TokenService,
-    private readonly parameterService: ParameterService,
   ) {}
 
   /**
    * GET /session/context
-   * Orquesta la obtencion de informacion del dispositivo y configuracion,
-   * devolviendo un objeto unificado para el frontend React.
+   * Orquesta la obtencion de informacion del dispositivo, devolviendo un
+   * objeto unificado para el frontend React.
    */
   @Get('context')
   async getContext(): Promise<SessionContext> {
@@ -35,15 +33,11 @@ export class SessionController {
     const empKey = parseInt(process.env.POS_DEV_EMP_KEY ?? '0', 10);
     const tokenSeguridad = this.tokenService.TokenGen(String(empKey)) || '';
 
-    // Obtener configuracion de parametros
-    const configuracion = this.parameterService.obtenerConfiguracion();
-
     return {
       Contexto: {
         EmpKey: parseInt(process.env.POS_DEV_EMP_KEY ?? '0', 10),
         Ambiente: dispositivoInfo.AmbienteId.trim(),
         TokenSeguridad: tokenSeguridad,
-        Configuracion: configuracion,
       },
     };
   }

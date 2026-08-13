@@ -10,6 +10,7 @@ import { firstValueFrom } from 'rxjs';
 import { join } from 'path';
 import { readFileSync } from 'fs';
 import { TokenService } from '@andestec/api-dispositivos';
+import { ParametrosService } from '@andestec/api-parametros';
 import type { DeviceConfig } from '../../common/interfaces/device.interfaces.js';
 import type { IPosContext } from '../../common/interfaces/pos-context.interface.js';
 import { PERFIL_CONFIG } from '../../common/constants/perfil-config.js';
@@ -44,6 +45,7 @@ export class GenexusClientService {
   constructor(
     private readonly httpService: HttpService,
     private readonly tokenService: TokenService,
+    private readonly parametrosService: ParametrosService,
   ) {}
 
   // ================================================================
@@ -225,6 +227,28 @@ export class GenexusClientService {
         .join('; ');
       this.sessionCookies.set(sessionId, cookiesString);
       this.sessionEmpKeys.set(sessionId, response.data.EmpKey);
+
+      // Precarga de parámetros en caché Redis (@andestec/api-parametros).
+      // Aislado en su propio try/catch: si el servicio de parámetros falla,
+      // el login ya fue exitoso y no debe bloquearse — el POS sigue operando
+      // con la caché Redis sobreviviente o con GetParametro devolviendo "".
+      try {
+        await this.parametrosService.InicializaParametrosDispositivo(
+          perfilConfig.ModuloAplicacionIdl,
+          response.data.EmpKey,
+          'WebApp',
+        );
+        await this.parametrosService.InicializaParametrosNegocio(
+          perfilConfig.ModuloAplicacionIdl,
+          response.data.EmpKey,
+          contexto.DispositivoId,
+          'WebApp',
+        );
+      } catch (error) {
+        this.logger.warn(
+          `[SessionHandler] Login exitoso, pero falló la precarga de parámetros: ${(error as Error).message}`,
+        );
+      }
 
       this.logger.log(
         `[SessionHandler] Sesión establecida para dispositivo: ${sessionId} — EmpKey autoritativo: ${response.data.EmpKey}`,

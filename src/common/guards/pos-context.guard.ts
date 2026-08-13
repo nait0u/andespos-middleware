@@ -7,8 +7,11 @@ import {
 } from '@nestjs/common';
 import type { Request } from 'express';
 import { DispositivoService, TokenService } from '@andestec/api-dispositivos';
+import { PersistenciaService } from '@andestec/persistencia-redis/nestjs';
 import type { IPosContext } from '../interfaces/pos-context.interface.js';
 import type { SDTDispositivoInformacion } from '../interfaces/device.interfaces.js';
+import type { SesionPerfilamientoPersistida } from '../interfaces/sesion-perfilamiento.interface.js';
+import { REPOSITORIO_SESIONES_PERFILAMIENTO, COOKIE_SESSION_ID } from '../constants/session-store.constants.js';
 
 interface PosRequest extends Request {
   posContext: IPosContext;
@@ -31,7 +34,14 @@ interface PosUserHeader {
 /**
  * PosContextGuard — valida cada request entrante desde el frontend web POS.
  *
- * Soporta dos paths de autenticación:
+ * Soporta tres paths de autenticación, evaluados en este orden:
+ *
+ *  PATH C — Sesión de Perfilamiento (JWT, producción):
+ *    Cookie: pos-session-id
+ *    Resuelve la sesión creada por `SetsessionController`/`SetsessionService`
+ *    (persistida en Redis vía `@andestec/persistencia-redis`). Si la cookie
+ *    no viene o la sesión no existe/expiró, cae a los paths siguientes —
+ *    no reemplaza ni reordena su lógica.
  *
  *  PATH A — Token M2406 (dispositivo físico / producción):
  *    Header: x-pos-token: <M2406>
@@ -42,7 +52,6 @@ interface PosUserHeader {
  *    Header: x-pos-user: <base64(JSON)>
  *    Solo disponible cuando NODE_ENV !== 'production'.
  *    No requiere archivos de dispositivo. DispositivoId = 'DEV-{rut}'.
- *    Úsalo mientras el sistema de JWT no esté implementado.
  *
  * Aplicar a nivel de clase con @UseGuards(PosContextGuard).
  */
@@ -53,14 +62,25 @@ export class PosContextGuard implements CanActivate {
   constructor(
     private readonly dispositivoService: DispositivoService,
     private readonly tokenService: TokenService,
+    private readonly persistenciaService: PersistenciaService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<PosRequest>();
+    const modo = (request.headers['x-pos-modo'] as string | undefined) ?? 'NotaVenta';
+
+    const sessionId = this.leerCookie(request, COOKIE_SESSION_ID);
+    if (sessionId) {
+      this.logger.debug(`[PATH C] Cookie ${COOKIE_SESSION_ID} presente — sessionId:${sessionId}`);
+      const activado = await this.activateConSesionPerfilamiento(request, sessionId, modo);
+      if (activado) return true;
+      this.logger.debug(`[PATH C] sessionId:${sessionId} inexistente/expirado en Redis — cae a PATH A/B`);
+    } else {
+      this.logger.debug(`[PATH C] Sin cookie ${COOKIE_SESSION_ID} en la request — se intenta PATH A/B`);
+    }
 
     const tokenHeader = request.headers['x-pos-token'] as string | undefined;
     const userHeader = request.headers['x-pos-user'] as string | undefined;
-    const modo = (request.headers['x-pos-modo'] as string | undefined) ?? 'NotaVenta';
 
     if (tokenHeader) {
       return this.activateConToken(request, tokenHeader, modo);
@@ -75,6 +95,71 @@ export class PosContextGuard implements CanActivate {
         ? 'Header x-pos-token requerido'
         : 'Header x-pos-token (M2406) o x-pos-user (base64 JSON) requerido',
     );
+  }
+
+  // ── PATH C: Sesión de Perfilamiento ──────────────────────────────────────
+
+  private leerCookie(request: Request, nombre: string): string | undefined {
+    const raw = request.headers['cookie'];
+    if (!raw) return undefined;
+    const match = raw
+      .split(';')
+      .map((s) => s.trim())
+      .find((s) => s.startsWith(`${nombre}=`));
+    return match ? decodeURIComponent(match.slice(nombre.length + 1)) : undefined;
+  }
+
+  private async activateConSesionPerfilamiento(
+    request: PosRequest,
+    sessionId: string,
+    modo: string,
+  ): Promise<boolean> {
+    const sesion = await this.persistenciaService.repositorio.obtener<SesionPerfilamientoPersistida>(
+      sessionId,
+      REPOSITORIO_SESIONES_PERFILAMIENTO,
+    );
+    if (!sesion) return false;
+
+    const vars = sesion.sessionVariables;
+    const parseHeader = (key: string, envFallback: string): number => {
+      const raw = (request.headers[key] as string | undefined) ?? process.env[envFallback] ?? '0';
+      const val = parseInt(raw, 10);
+      return isNaN(val) ? 0 : val;
+    };
+    const parseHeaderStr = (key: string, envFallback: string): string =>
+      (request.headers[key] as string | undefined) ?? process.env[envFallback] ?? '';
+
+    request.posContext = {
+      EmpKey: Number(vars.empkey ?? 0) || 0,
+      PuntoAccesoKey: parseHeader('x-pos-punto-acceso-key', 'POS_DEV_PUNTO_ACCESO_KEY'),
+      PuntoAccesoDescripcion: parseHeaderStr('x-pos-punto-acceso-desc', 'POS_DEV_PUNTO_ACCESO_DESC'),
+      EstacionTurnoIdl: parseHeaderStr('x-pos-estacion-turno-idl', 'POS_DEV_ESTACION_TURNO_IDL'),
+      // Perfilamiento identifica a la persona y la empresa, no el terminal físico —
+      // el resto de los campos de estación/turno siguen viniendo de headers/env,
+      // igual que en PATH B.
+      EstacionIdl: `PRF-${vars.RUTNODV || vars._RUTUSU}`,
+      Ambiente: process.env.POS_DEV_AMBIENTE ?? 'DEV',
+      DispositivoId: `PRF-${vars.RUTNODV || vars._RUTUSU}`,
+      Modo: modo,
+      VendedorKey: parseHeader('x-pos-vendedor-key', 'POS_DEV_VENDEDOR_KEY'),
+      TurnoCajaKey: parseHeader('x-pos-turno-caja-key', 'POS_DEV_TURNO_CAJA_KEY'),
+      EstacionTurnoEsCaja: (request.headers['x-pos-estacion-es-caja'] as string | undefined) === 'true',
+      token: '',
+      RutUsuario: vars.RUTNODV,
+      RutUsuarioDV: vars._RUTUSU,
+      NombreUsuario: vars._NOMUSU,
+      Perfil: vars._NOTPERFIL,
+      PerfilDesc: vars._NOTPERFILDES,
+      // No modelados por el JWT de Perfilamiento tal como llega hoy — sin inventar valores.
+      Mandante: '',
+      RutEmpresa: vars.EmpresaRut ?? '',
+      Sucursal: '',
+    };
+
+    this.logger.debug(
+      `[PATH C] POS context OK — RUT:${vars.RUTNODV} Perfil:${vars._NOTPERFIL} Emp:${request.posContext.EmpKey}`,
+    );
+    return true;
   }
 
   // ── PATH A: M2406 ────────────────────────────────────────────────────────
