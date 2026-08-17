@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { GenexusClientService } from '../../core/genexus-client/genexus-client.service.js';
 import { TokenService } from '@andestec/api-dispositivos';
-import { ParametrosService } from '@andestec/api-parametros';
+import { PosParametrosService } from '@andestec/api-parametros-pos';
 import type { IPosContext } from '../../common/interfaces/pos-context.interface.js';
 import type { GxMessage } from '../../common/interfaces/parameter.interfaces.js';
 import type { FiltrosPreciosDto } from './dto/filtros-precios.dto.js';
@@ -50,7 +50,7 @@ export class PreciosService {
   constructor(
     private readonly genexusClient: GenexusClientService,
     private readonly tokenService: TokenService,
-    private readonly parametrosService: ParametrosService,
+    private readonly posParametrosService: PosParametrosService,
   ) {}
 
   // Token firmado con strControl = EmpKey — convención para reads y operaciones
@@ -380,11 +380,9 @@ export class PreciosService {
     // El valor del parámetro es una lista serializada "ID,Desc;ID,Desc" — no un input para GeneXus.
     // Se parsea directamente desde el sistema de parámetros (Aplicacion_Idl="ServidorPOS").
     if (parametroId) {
-      const valor = await this.parametrosService.GetParametro(parametroId, {
-        aplicacionId: 'ServidorPOS',
+      const valor = await this.posParametrosService.GetParametroPos(parametroId, {
         empKey: ctx.EmpKey,
-        alcanceId: ctx.DispositivoId,
-        modo: 'WebApp',
+        sucursal: ctx.Sucursal,
       });
 
       if (valor) {

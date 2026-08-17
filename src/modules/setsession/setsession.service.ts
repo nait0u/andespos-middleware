@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PersistenciaService } from '@andestec/persistencia-redis/nestjs';
-import { SessionVariablesService, type SessionVariables, type ErrorTipo } from '../../jwt-perfilamiento/index.js';
+import { SessionVariablesService, type SessionVariables, type ErrorTipo } from '@andestec/jwt-perfilamiento';
 import { REPOSITORIO_SESIONES_PERFILAMIENTO } from '../../common/constants/session-store.constants.js';
 import type { SesionPerfilamientoPersistida } from '../../common/interfaces/sesion-perfilamiento.interface.js';
 

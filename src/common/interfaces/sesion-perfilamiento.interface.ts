@@ -1,4 +1,4 @@
-import type { SessionVariables } from '../../jwt-perfilamiento/index.js';
+import type { SessionVariables } from '@andestec/jwt-perfilamiento';
 
 /**
  * Forma persistida en Redis por `SetsessionService` y leída por
